@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    
+    
+    <groupId>cn.hubbo</groupId>
+    <artifactId>hubbo-parent</artifactId>
+    <version>0.1</version>
+    <name>hubbo-parent</name>
+    <description>父工程</description>
+    
+    <packaging>pom</packaging>
+    
+    <modules>
+        <module>hubbo-web</module>
+        <module>hubbo-service</module>
+        <module>hubbo-dao</module>
+        <module>hubbo-config</module>
+        <module>hubbo-domain</module>
+        <module>hubbo-security</module>
+        <module>hubbo-common</module>
+        <module>hubbo-utils</module>
+        <module>hubbo-api</module>
+        <module>hubbo-service-facade</module>
+    </modules>
+
+
+   
+    
+    <properties>
+        <!-- Spring 依赖对照 https://start.spring.io/actuator/info -->
+        <!-- 禁用Hutool以及阿里相关的依赖 -->
+        <java.version>17</java.version>
+        <spring.boot.version>3.1.4</spring.boot.version>
+        <spring.cloud.version>2022.0.4</spring.cloud.version>
+        <guava.version>32.1.2-jre</guava.version>
+        <commons.lang.version>3.12.0</commons.lang.version>
+    </properties>
+    
+    
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Boot -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>${spring.boot.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            
+            <!-- Spring Cloud -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Guava -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            
+            <!-- Commons-lang3 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons.lang.version}</version>
+            </dependency>
+
+
+        </dependencies>
+    </dependencyManagement>
+    
+    
+
+</project>
