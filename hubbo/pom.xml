@@ -7,13 +7,11 @@
         <version>0.1</version>
     </parent>
 
-    <artifactId>hubbo-utils</artifactId>
+    <artifactId>hubbo</artifactId>
     <packaging>jar</packaging>
 
-    <name>hubbo-utils</name>
+    <name>hubbo</name>
     <url>http://maven.apache.org</url>
-    <description>工具类</description>
-
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,10 +19,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>${jwt.version}</version>
+            <groupId>cn.hubbo</groupId>
+            <artifactId>hubbo-web</artifactId>
+            <version>0.1</version>
         </dependency>
-
     </dependencies>
 </project>
