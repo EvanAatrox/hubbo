@@ -38,6 +38,9 @@
         <commons.io.version>2.13.0</commons.io.version>
         <jwt.version>4.4.0</jwt.version>
         <lombok.version>1.18.28</lombok.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
 

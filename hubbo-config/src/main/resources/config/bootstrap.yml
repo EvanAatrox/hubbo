@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: hubbo
+  
+  cloud:
+    consul:
+      host: 127.0.0.1
+      port: 8500
+      discovery:
+        enabled: true
+        heartbeat:
+          enabled: true
+        service-name: hubbo
+        
+        
+    vault:
+      host: 127.0.0.1
+      port: 8200
+      scheme: http
+      fail-fast: false
+      authentication: token
+      token: hvs.gjvOUxYM5L7GEHaiyXkSLuYe
+      kv:
+        enabled: true
+        profile-separator: /
+        backend: cubbyhole
+        application-name: application/test
+
+mysql:
+  password: hvs.CAESIK7Z-DRk6mXD3DbuByOcrtfOkRhQBzQ3uuebCeRB-N2NGh4KHGh2cy4yRHU3UUNpcHVxb3pMOXRaaVNReW40THc
+  desc: "abc"

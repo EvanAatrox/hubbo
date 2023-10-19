@@ -2,10 +2,12 @@ package cn.hubbo.domain.entity;
 
 import cn.hubbo.domain.enumeration.GenderEnum;
 import cn.hubbo.domain.enumeration.UserStatusEnum;
+import cn.hubbo.utils.annotation.json.Ingore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Comment;
@@ -28,6 +30,7 @@ public class User {
     @Id
     @Column(columnDefinition = "integer primary key auto_increment", updatable = false)
     @Comment("用户ID,不对外暴露")
+    @Ingore
     private Integer userId;
 
     @Column(columnDefinition = "varchar(60) ", nullable = false, unique = true)
@@ -40,6 +43,8 @@ public class User {
 
     @Column(columnDefinition = "char(60)", nullable = false)
     @Comment("用户密码,固定60位")
+    @Transient
+    @Ingore
     private String password;
 
 
