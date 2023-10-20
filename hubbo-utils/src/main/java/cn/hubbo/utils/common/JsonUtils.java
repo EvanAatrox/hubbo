@@ -1,4 +1,4 @@
-package cn.hubbo.utils.base;
+package cn.hubbo.utils.common;
 
 import cn.hubbo.utils.annotation.json.Ingore;
 import com.google.gson.ExclusionStrategy;

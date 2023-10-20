@@ -5,7 +5,7 @@ import sun.misc.Unsafe;
 /**
  * @author 张晓华
  * @date 2023-10-19 11:18
- * @usage 当前类的用途描述
+ * @usage 一个反射相关的工具类
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public class ReflectUtils {

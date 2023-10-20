@@ -1,5 +1,6 @@
 package cn.hubbo.application;
 
+import cn.hubbo.utils.annotation.test.TestCase;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,19 +13,19 @@ import org.springframework.core.env.Environment;
  */
 @SpringBootTest
 public class VaultConfigurationTest {
-    
+
     @Resource
     private Environment environment;
-    
-    
+
+
     @Test
+    @TestCase("Vault配置读取测试")
     public void testReadApplicationConfig() {
         String password = environment.getProperty("mysql.password");
         String testContent = environment.getProperty("mysql.desc");
         System.out.println(password);
         System.out.println(testContent);
     }
-    
-    
-    
+
+
 }

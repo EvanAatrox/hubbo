@@ -1,4 +1,4 @@
-package cn.hubbo.domain.entity;
+package cn.hubbo.domain.dos;
 
 import cn.hubbo.domain.enumeration.GenderEnum;
 import cn.hubbo.domain.enumeration.UserStatusEnum;
@@ -6,6 +6,9 @@ import cn.hubbo.utils.annotation.json.Ingore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.Data;
@@ -13,6 +16,7 @@ import lombok.experimental.Accessors;
 import org.hibernate.annotations.Comment;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author 张晓华
@@ -28,12 +32,12 @@ import java.util.Date;
 public class User {
 
     @Id
-    @Column(columnDefinition = "integer primary key auto_increment", updatable = false)
+    @Column(name = "user_id", columnDefinition = "integer primary key auto_increment", updatable = false)
     @Comment("用户ID,不对外暴露")
     @Ingore
     private Integer userId;
 
-    @Column(columnDefinition = "varchar(60) ", nullable = false, unique = true)
+    @Column(name = "user_name", columnDefinition = "varchar(60) ", nullable = false, unique = true)
     @Comment("用户名,允许用户使用用户名进行登录")
     private String username;
 
@@ -52,15 +56,15 @@ public class User {
     @Comment("用户邮箱")
     private String email;
 
-    @Column(columnDefinition = "timestamp(6)", nullable = false)
+    @Column(name = "register_date", columnDefinition = "timestamp(6) default systimestamp()", nullable = false)
     @Comment("注册日期")
     private Date registerDate;
 
-    @Column(columnDefinition = "smallint default 1")
+    @Column(columnDefinition = "bit(1) default 1")
     @Comment("性别,1男,0女")
     private GenderEnum gender;
 
-    @Column(columnDefinition = "varchar(255) default 'http://img.zhaogexing.com/2020/01/30/1580360931159906.jpg'")
+    @Column(name = "profile_url", columnDefinition = "varchar(255) default 'http://img.zhaogexing.com/2020/01/30/1580360931159906.jpg'")
     @Comment("头像地址")
     private String profileUrl;
 
@@ -70,9 +74,17 @@ public class User {
 
     // Spring Security相关的状态位
 
-    @Column(columnDefinition = "smallint default 0")
+    @Column(name = "account_status", columnDefinition = "bit(1) default 0")
     @Comment("用户账户状态,0正常,1锁定")
     private UserStatusEnum accountStatus;
+
+
+    @ManyToMany(targetEntity = Role.class)
+    @JoinTable(name = "t_user_role",
+            joinColumns = {@JoinColumn(name = "user_id", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", nullable = false)}
+    )
+    private List<Role> roles;
 
 
 }

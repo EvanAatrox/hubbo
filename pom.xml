@@ -29,7 +29,7 @@
 
     <properties>
         <!-- Spring 依赖对照 https://start.spring.io/actuator/info -->
-        <!-- 禁用Hutool以及阿里相关的依赖 -->
+        <!-- 减少阿里相关的依赖 -->
         <java.version>17</java.version>
         <spring.boot.version>3.1.4</spring.boot.version>
         <spring.cloud.version>2022.0.4</spring.cloud.version>
@@ -38,6 +38,7 @@
         <commons.io.version>2.13.0</commons.io.version>
         <jwt.version>4.4.0</jwt.version>
         <lombok.version>1.18.28</lombok.version>
+        <hutool.version>5.8.22</hutool.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
