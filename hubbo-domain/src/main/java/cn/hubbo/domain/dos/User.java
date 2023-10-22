@@ -2,15 +2,18 @@ package cn.hubbo.domain.dos;
 
 import cn.hubbo.domain.enumeration.GenderEnum;
 import cn.hubbo.domain.enumeration.UserStatusEnum;
-import cn.hubbo.utils.annotation.json.Ingore;
+import cn.hubbo.utils.annotation.json.Ignore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Comment;
@@ -27,36 +30,37 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-@Entity
-@Table(name = "t_user")
+@Entity(name = "t_user")
+@Table(indexes = {@Index(name = "user_name_index", columnList = "user_name", unique = true),
+        @Index(name = "phone_index", columnList = "phone", unique = true)})
 public class User {
 
     @Id
-    @Column(name = "user_id", columnDefinition = "integer primary key auto_increment", updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id", columnDefinition = "integer", updatable = false)
     @Comment("用户ID,不对外暴露")
-    @Ingore
+    @Ignore
     private Integer userId;
 
-    @Column(name = "user_name", columnDefinition = "varchar(60) ", nullable = false, unique = true)
+    @Column(name = "user_name", columnDefinition = "varchar(60) ", nullable = false)
     @Comment("用户名,允许用户使用用户名进行登录")
     private String username;
 
-    @Column(columnDefinition = "char(11)", unique = true)
+    @Column(columnDefinition = "char(11)", nullable = false)
     @Comment("用户手机号,允许使用手机号进行登录操作")
     private String phone;
 
     @Column(columnDefinition = "char(60)", nullable = false)
     @Comment("用户密码,固定60位")
-    @Transient
-    @Ingore
+    @Ignore
     private String password;
 
 
-    @Column(columnDefinition = "varchar(30)", unique = true)
+    @Column(columnDefinition = "varchar(30)", nullable = false, unique = true)
     @Comment("用户邮箱")
     private String email;
 
-    @Column(name = "register_date", columnDefinition = "timestamp(6) default systimestamp()", nullable = false)
+    @Column(name = "register_date", columnDefinition = "timestamp default current_timestamp()", nullable = false)
     @Comment("注册日期")
     private Date registerDate;
 
@@ -74,16 +78,22 @@ public class User {
 
     // Spring Security相关的状态位
 
-    @Column(name = "account_status", columnDefinition = "bit(1) default 0")
-    @Comment("用户账户状态,0正常,1锁定")
+    @Column(name = "account_status", columnDefinition = "bit(1) default 1")
+    @Comment("用户账户状态,0锁定,1正常")
     private UserStatusEnum accountStatus;
 
 
-    @ManyToMany(targetEntity = Role.class)
+    @Column(name = "update_time", columnDefinition = "timestamp")
+    @Comment("最近一次的更新时间")
+    private Date updateTime;
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "t_user_role",
             joinColumns = {@JoinColumn(name = "user_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "role_id", nullable = false)}
     )
+    @Ignore
     private List<Role> roles;
 
 

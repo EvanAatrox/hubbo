@@ -1,17 +1,14 @@
 package cn.hubbo.utils.common;
 
-import cn.hubbo.utils.annotation.json.Ingore;
+import cn.hubbo.utils.annotation.json.Ignore;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -21,17 +18,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class JsonUtils {
 
-    
+
     private static final Gson DEFAULT_GSON;
-    
+
     private static final Gson STRATEGIES_GSON;
-    
-    
-    private static final Map<FieldAttributes,Boolean> cache;
-    
+
+
+    private static final Map<FieldAttributes, Boolean> cache;
+
     static {
         DEFAULT_GSON = createGson(null);
-        STRATEGIES_GSON =createGson(getExclusionStrategies());
+        STRATEGIES_GSON = createGson(getExclusionStrategies());
         cache = new ConcurrentHashMap<>();
     }
 
@@ -68,11 +65,11 @@ public class JsonUtils {
     private static List<ExclusionStrategy> getExclusionStrategies() {
         ArrayList<ExclusionStrategy> exclusionStrategies = new ArrayList<>();
         exclusionStrategies.add(new ExclusionStrategy() {
-            
+
             @Override
             public boolean shouldSkipField(FieldAttributes f) {
                 if (!cache.containsKey(f)) {
-                    Ingore annotation = f.getAnnotation(Ingore.class);
+                    Ignore annotation = f.getAnnotation(Ignore.class);
                     cache.put(f, annotation != null);
                 }
                 return cache.get(f);
@@ -85,7 +82,6 @@ public class JsonUtils {
         });
         return exclusionStrategies;
     }
-    
-    
-    
+
+
 }

@@ -15,6 +15,8 @@ import java.util.function.Function;
  * @usage 当前类的用途描述
  */
 public class UnModifyMap<K, V> extends HashMap<K, V> {
+
+
     @Override
     public V get(Object key) {
         V v = super.get(key);
@@ -26,8 +28,7 @@ public class UnModifyMap<K, V> extends HashMap<K, V> {
 
     @Override
     public V put(K key, V value) {
-        execute("put");
-        return null;
+        return super.put(key, value);
     }
 
     @Override

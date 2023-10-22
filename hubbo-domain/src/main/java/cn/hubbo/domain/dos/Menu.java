@@ -2,8 +2,13 @@ package cn.hubbo.domain.dos;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Comment;
@@ -16,14 +21,17 @@ import java.util.List;
  * @date 2023-10-20 16:25
  * @usage 当前类的用途描述
  */
-@Entity(name = "t_menu")
+
 @Data
 @Accessors(chain = true)
+@Entity(name = "t_menu")
+@Table(indexes = {@Index(name = "menu_name_index", columnList = "menu_name", unique = true)})
 public class Menu {
 
 
     @Id
-    @Column(name = "menu_id", columnDefinition = "smallint primary key auto_increment")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "menu_id", columnDefinition = "smallint")
     @Comment("菜单编号")
     private Integer menuId;
 
@@ -68,22 +76,22 @@ public class Menu {
     private boolean deleteFlag;
 
 
-    @Column(name = "create_time", columnDefinition = "timestamp(6) default systimestamp()", updatable = false)
+    @Column(name = "create_time", columnDefinition = "timestamp default current_timestamp()", updatable = false)
     @Comment("角色的创建时间")
     private Date creatTime;
 
 
-    @Column(name = "update_time", columnDefinition = "timestamp(6)")
+    @Column(name = "update_time", columnDefinition = "timestamp")
     @Comment("最近一次的更新时间")
     private Date updateTime;
 
 
-    @Column(name = "delete_time", columnDefinition = "timestamp(6)", updatable = false)
+    @Column(name = "delete_time", columnDefinition = "timestamp", updatable = false)
     @Comment("删除时间")
     private Date deleteTime;
 
 
-    @ManyToMany(mappedBy = "menus")
+    @ManyToMany(mappedBy = "menus", fetch = FetchType.EAGER)
     private List<Role> roles;
 
 }

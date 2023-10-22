@@ -1,5 +1,12 @@
 package cn.hubbo.unit;
 
+import cn.hubbo.domain.dos.User;
+import cn.hubbo.utils.common.JsonUtils;
+import cn.hubbo.utils.security.JWTUtils;
+import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
+
 /**
  * @author 张晓华
  * @version V1.0
@@ -9,5 +16,12 @@ package cn.hubbo.unit;
  */
 public class UtilsUnitTest {
 
+
+    @Test
+    public void testGenerateToken() {
+        User user = new User().setUsername("user1");
+        String token = JWTUtils.generateToken(UUID.randomUUID().toString(), JsonUtils.getDefaultGson().toJson(user));
+        System.out.println(token);
+    }
 
 }

@@ -20,11 +20,20 @@
 
     <dependencies>
         <!-- utils && domain -->
-        
         <dependency>
             <groupId>cn.hubbo</groupId>
             <artifactId>hubbo-domain</artifactId>
             <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hubbo</groupId>
+            <artifactId>hubbo-utils</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

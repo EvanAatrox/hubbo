@@ -12,7 +12,7 @@ import org.springframework.core.env.Environment;
  * @usage 当前类的用途描述
  */
 @SpringBootTest
-public class VaultConfigurationTest {
+public class SystemConfigurationTest {
 
     @Resource
     private Environment environment;
@@ -25,6 +25,21 @@ public class VaultConfigurationTest {
         String testContent = environment.getProperty("mysql.desc");
         System.out.println(password);
         System.out.println(testContent);
+    }
+
+
+    @Test
+    public void testReadConfig() {
+        String code = environment.getProperty("spring.datasource.driver-class-name");
+        System.out.println(code);
+        try {
+            Class<?> cla = Class.forName(code);
+            System.out.println(cla.getSimpleName());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        String password = environment.getProperty("spring.data.redis.password");
+        System.out.println(password);
     }
 
 

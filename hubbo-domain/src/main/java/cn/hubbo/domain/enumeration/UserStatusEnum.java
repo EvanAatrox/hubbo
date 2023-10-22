@@ -13,8 +13,8 @@ import lombok.Getter;
 @Getter
 public enum UserStatusEnum {
 
-    DEFAULT(0, "正常"),
-    LOCKED(1, "锁定");
+    LOCKED(0, "锁定"),
+    DEFAULT(1, "正常");
 
     /* 状态值 */
     private final Integer code;

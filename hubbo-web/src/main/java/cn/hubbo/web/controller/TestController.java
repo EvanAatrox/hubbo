@@ -1,7 +1,10 @@
 package cn.hubbo.web.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 
 /**
  * @author 张晓华
@@ -11,8 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/test")
 public class TestController {
-    
-    
-    
-    
+
+    @GetMapping("/current/date")
+    public Date date() {
+        return new Date();
+    }
+
+
 }

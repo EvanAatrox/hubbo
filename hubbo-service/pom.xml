@@ -30,6 +30,16 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>cn.hubbo</groupId>
+            <artifactId>hubbo-service</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hubbo</groupId>
+            <artifactId>hubbo-dao</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -45,5 +55,5 @@
             </plugin>
         </plugins>
     </build>
-    
+
 </project>

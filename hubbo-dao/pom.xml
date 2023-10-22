@@ -24,6 +24,11 @@
             <artifactId>hubbo-common</artifactId>
             <version>0.1</version>
         </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.connector.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -39,5 +44,5 @@
             </plugin>
         </plugins>
     </build>
-    
+
 </project>
