@@ -3,7 +3,7 @@ package cn.hubbo.application;
 import cn.hubbo.domain.dos.Role;
 import cn.hubbo.domain.dos.User;
 import cn.hubbo.domain.enumeration.GenderEnum;
-import cn.hubbo.domain.enumeration.UserStatusEnum;
+import cn.hubbo.domain.enumeration.AccountStatusEnum;
 import cn.hubbo.service.IRoleService;
 import cn.hubbo.service.IUserService;
 import jakarta.annotation.Resource;
@@ -45,7 +45,7 @@ public class UserAboutServiceTest {
         for (String name : names) {
             System.out.println("beanName " + name);
         }
-        User user = new User().setUsername("user1").setPassword(new BCryptPasswordEncoder().encode("123456")).setPhone("1234567890").setAccountStatus(UserStatusEnum.DEFAULT).setGender(GenderEnum.MALE).setEmail("wantfulai@163.com").setRemark("系统用户").setRegisterDate(new Date());
+        User user = new User().setUsername("user1").setPassword(new BCryptPasswordEncoder().encode("123456")).setPhone("1234567890").setAccountStatus(AccountStatusEnum.DEFAULT).setGender(GenderEnum.MALE).setEmail("wantfulai@163.com").setRemark("系统用户").setRegisterDate(new Date());
         user = userService.save(user);
         System.out.println("保存后的用户信息 " + user);
     }

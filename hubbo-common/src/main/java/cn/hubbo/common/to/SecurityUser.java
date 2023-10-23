@@ -1,7 +1,8 @@
 package cn.hubbo.common.to;
 
+import cn.hubbo.domain.dos.Role;
 import cn.hubbo.domain.dos.User;
-import cn.hubbo.domain.enumeration.UserStatusEnum;
+import cn.hubbo.domain.enumeration.AccountStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author 张晓华
@@ -28,8 +30,11 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<Role> roles = userDetail.getRoles();
         ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("admin"));
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));   
+        }
         return authorities;
     }
 
@@ -60,6 +65,6 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return userDetail.getAccountStatus().equals(UserStatusEnum.DEFAULT);
+        return userDetail.getAccountStatus().equals(AccountStatusEnum.DEFAULT);
     }
 }

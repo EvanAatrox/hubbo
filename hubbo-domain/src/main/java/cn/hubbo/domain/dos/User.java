@@ -1,7 +1,7 @@
 package cn.hubbo.domain.dos;
 
 import cn.hubbo.domain.enumeration.GenderEnum;
-import cn.hubbo.domain.enumeration.UserStatusEnum;
+import cn.hubbo.domain.enumeration.AccountStatusEnum;
 import cn.hubbo.utils.annotation.json.Ignore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -80,7 +80,7 @@ public class User {
 
     @Column(name = "account_status", columnDefinition = "bit(1) default 1")
     @Comment("用户账户状态,0锁定,1正常")
-    private UserStatusEnum accountStatus;
+    private AccountStatusEnum accountStatus;
 
 
     @Column(name = "update_time", columnDefinition = "timestamp")

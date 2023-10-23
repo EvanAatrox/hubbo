@@ -1,20 +1,22 @@
 package cn.hubbo.security.filter;
 
+import cn.hubbo.common.exception.security.CaptchaNotValidException;
 import cn.hubbo.common.to.SecurityUser;
 import cn.hubbo.domain.dos.User;
 import cn.hubbo.domain.enumeration.ResponseStatusEnum;
 import cn.hubbo.domain.vo.LoginUserVO;
 import cn.hubbo.domain.vo.Result;
 import cn.hubbo.utils.common.JsonUtils;
+import cn.hubbo.utils.lang.base.ClientInfo;
 import cn.hubbo.utils.security.JWTUtils;
 import cn.hubbo.utils.web.ServletUtils;
 import cn.hutool.core.net.NetUtil;
 import com.google.gson.Gson;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AccountStatusException;
@@ -37,6 +39,7 @@ import java.util.UUID;
  * @date 2023/10/22 21:17
  * @Copyright © 2023-2025 版权所有，未经授权均为剽窃，作者保留一切权利
  */
+@Slf4j
 public class FormAndJsonLoginFilter extends UsernamePasswordAuthenticationFilter {
 
 
@@ -54,8 +57,11 @@ public class FormAndJsonLoginFilter extends UsernamePasswordAuthenticationFilter
     /**
      * @param request  请求
      * @param response 响应
+     *
      * @return 认证信息
-     * @throws AuthenticationException 失败信息,异常的明细详见CSDN 程序三两行的博客描述 https://blog.csdn.net/qq_34491508/article/details/126010263
+     *
+     * @throws AuthenticationException 失败信息,异常的明细详见CSDN 程序三两行的博客描述
+     *                                 https://blog.csdn.net/qq_34491508/article/details/126010263
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -67,17 +73,17 @@ public class FormAndJsonLoginFilter extends UsernamePasswordAuthenticationFilter
                 userVO = ServletUtils.getRequiredData(request, LoginUserVO.class);
             } catch (Exception ignored) {
             }
+            // 校验提交的登录信息是否有效，无效则抛出不充分的认证信息错误
             if (Objects.isNull(userVO)) {
-                addRequestToRestrictedAccessList(request);
                 throw new InsufficientAuthenticationException("无效的登录请求");
             }
-            // TODO 校验验证码,IP等信息
+            //TODO 校验验证码是否一致，否则抛出CaptchaNotValidException
+            checkCaptchaIsValid(userVO);
             authenticationToken = UsernamePasswordAuthenticationToken.unauthenticated(userVO.getUsername(), userVO.getRawPasswd());
         } else {
             String username = ServletUtils.getParameterOrDefault(request, "username");
             String rawPasswd = ServletUtils.getParameterOrDefault(request, "rawPasswd");
             if (StringUtils.isBlank(username) || StringUtils.isEmpty(rawPasswd)) {
-                addRequestToRestrictedAccessList(request);
                 throw new InsufficientAuthenticationException("无效的登录请求");
             }
             authenticationToken = UsernamePasswordAuthenticationToken.unauthenticated(username, rawPasswd);
@@ -93,6 +99,7 @@ public class FormAndJsonLoginFilter extends UsernamePasswordAuthenticationFilter
      * @param response   响应
      * @param chain      过滤器链
      * @param authResult 认证信息
+     *
      * @throws IOException      异常信息
      * @throws ServletException 异常信息
      */
@@ -111,44 +118,15 @@ public class FormAndJsonLoginFilter extends UsernamePasswordAuthenticationFilter
             chain.doFilter(request, response);
         }
     }
-
+    
 
     /**
-     * 认证失败的回调
+     * TODO 校验验证码
      *
-     * @param request  请求
-     * @param response 响应
-     * @param failed   异常信息
-     * @throws IOException      异常信息
-     * @throws ServletException 异常信息
+     * @param loginUserVO 校验验证码是否一致，否则抛出CaptchaNotValidException
      */
-    @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        System.out.println("认证失败信息 " + failed);
-        String detailMessage = "认证失败";
-        // TODO 待完善
-        if (failed instanceof BadCredentialsException) {
-            detailMessage = "账号或者密码错误";
-        } else if (failed instanceof InsufficientAuthenticationException) {
-            // 未提交用户登录名或者密码,或者验证码等信息才会抛出这个错误
-            detailMessage = "请检查登录参数是否齐全";
-        } else if (failed instanceof AccountStatusException) {
-            // 账号状态异常
-            detailMessage = "账号已经被锁定,无法进行操作";
-        }
-        Result result = new Result(ResponseStatusEnum.ERROR).add("detail", detailMessage);
-        ServletUtils.reposeObjectWithJson(response, result);
-    }
+    private void checkCaptchaIsValid(LoginUserVO loginUserVO) {
 
-    /**
-     * @param request 记录下客户端的错误请求信息,超出限制后服务端将会拒绝与客户端相同IP的所有请求
-     */
-    private void addRequestToRestrictedAccessList(ServletRequest request) {
-        String clientIP = ServletUtils.getClientIP(request);
-        if (!NetUtil.isInnerIP(clientIP)) {
-            // TODO 记录异常信息和客户端信息
-            System.out.println("记录下一次异常行为");
-        }
     }
 
 

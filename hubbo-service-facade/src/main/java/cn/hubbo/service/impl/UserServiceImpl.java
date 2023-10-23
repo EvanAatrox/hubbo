@@ -4,12 +4,16 @@ import cn.hubbo.dao.RoleDao;
 import cn.hubbo.dao.UserDao;
 import cn.hubbo.domain.dos.Role;
 import cn.hubbo.domain.dos.User;
+import cn.hubbo.domain.enumeration.AccountStatusEnum;
 import cn.hubbo.service.IRoleService;
 import cn.hubbo.service.IUserService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -22,6 +26,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserServiceImpl implements IUserService {
 
 
@@ -34,6 +39,7 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * @param id 用户id
+     *
      * @return 用户信息
      */
     @Override
@@ -43,6 +49,7 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * @param user 保存的user对象
+     *
      * @return 持久化后的user对象
      */
     @Override
@@ -55,11 +62,25 @@ public class UserServiceImpl implements IUserService {
      * 根据用户名查询用户信息
      *
      * @param username 用户名
+     *
      * @return 用户信息
      */
     @Override
     public User queryUserByUsername(String username) {
-        return userDao.queryByUsernameEquals(username);
+        User user = userDao.queryByUsernameEquals(username);
+        if (Objects.isNull(user)) {
+            return null;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(user.getUpdateTime());
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        if (user.getAccountStatus().equals(AccountStatusEnum.LOCKED) && calendar.getTime().before(new Date())) {
+            user.setAccountStatus(AccountStatusEnum.DEFAULT);
+            user.setUpdateTime(new Date());
+            log.info("解锁当前账户{}", user);
+            return this.userDao.save(user);
+        }
+        return user;
     }
 
     /**
@@ -67,20 +88,36 @@ public class UserServiceImpl implements IUserService {
      *
      * @param uid 用户id
      * @param rid 角色id
+     *
      * @return 为用户设置角色
      */
     @Override
     public User updateUserRole(Integer uid, Integer rid) {
         AtomicReference<User> reference = new AtomicReference<>(null);
-        queryById(uid).ifPresentOrElse(user -> roleService.queryById(rid).ifPresent(role -> {
+        queryById(uid).ifPresent(user -> roleService.queryById(rid).ifPresent(role -> {
             if (!user.getRoles().stream().map(Role::getRoleId).toList().contains(role.getRoleId())) {
                 user.getRoles().add(role);
                 user.setUpdateTime(new Date());
                 save(user);
             }
             reference.set(user);
-        }), () -> System.out.println("nothing to do"));
+        }));
         return reference.get();
+    }
+
+
+    /**
+     * 锁定账户
+     *
+     * @param user 用户信息
+     *
+     * @return 修改后的用户信息
+     */
+    @Override
+    public User lockAccount(User user) {
+        user.setAccountStatus(AccountStatusEnum.LOCKED);
+        user.setUpdateTime(new Date());
+        return userDao.save(user);
     }
 
 

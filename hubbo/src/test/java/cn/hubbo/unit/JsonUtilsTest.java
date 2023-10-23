@@ -2,7 +2,7 @@ package cn.hubbo.unit;
 
 import cn.hubbo.domain.dos.User;
 import cn.hubbo.domain.enumeration.GenderEnum;
-import cn.hubbo.domain.enumeration.UserStatusEnum;
+import cn.hubbo.domain.enumeration.AccountStatusEnum;
 import cn.hubbo.utils.annotation.test.TestCase;
 import cn.hubbo.utils.common.JsonUtils;
 import cn.hubbo.utils.date.TimeUtils;
@@ -26,7 +26,7 @@ public class JsonUtilsTest {
                 .setPassword("123456")
                 .setGender(GenderEnum.MALE)
                 .setPhone("12345678901")
-                .setAccountStatus(UserStatusEnum.DEFAULT);
+                .setAccountStatus(AccountStatusEnum.DEFAULT);
         Gson defaultGson = JsonUtils.getStrategiesGson();
         Long time1 = TimeUtils.execute(() -> {
             String str1 = defaultGson.toJson(user);

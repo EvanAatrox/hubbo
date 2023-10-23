@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 
 @Getter
-public enum UserStatusEnum {
+public enum AccountStatusEnum {
 
     LOCKED(0, "锁定"),
     DEFAULT(1, "正常");
@@ -23,7 +23,7 @@ public enum UserStatusEnum {
     private final String desc;
 
 
-    UserStatusEnum(Integer code, String desc) {
+    AccountStatusEnum(Integer code, String desc) {
         this.code = code;
         this.desc = desc;
     }
