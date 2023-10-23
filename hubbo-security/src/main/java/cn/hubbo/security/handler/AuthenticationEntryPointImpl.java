@@ -15,7 +15,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -24,9 +23,8 @@ import java.io.IOException;
  * @date 2023-10-23 11:08
  * @usage 认证失败异常处理器
  */
-@Component
 @Slf4j
-public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
 
 
     /**
@@ -36,7 +34,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
      * @param request       请求
      * @param response      响应
      * @param authException 异常信息
-     *
      * @throws IOException      异常信息
      * @throws ServletException 异常信息
      */

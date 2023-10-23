@@ -39,7 +39,6 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * @param id 用户id
-     *
      * @return 用户信息
      */
     @Override
@@ -49,7 +48,6 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * @param user 保存的user对象
-     *
      * @return 持久化后的user对象
      */
     @Override
@@ -62,12 +60,11 @@ public class UserServiceImpl implements IUserService {
      * 根据用户名查询用户信息
      *
      * @param username 用户名
-     *
      * @return 用户信息
      */
     @Override
     public User queryUserByUsername(String username) {
-        User user = userDao.queryByUsernameEquals(username);
+        User user = userDao.queryByUsernameEquals(username.trim());
         if (Objects.isNull(user)) {
             return null;
         }
@@ -88,7 +85,6 @@ public class UserServiceImpl implements IUserService {
      *
      * @param uid 用户id
      * @param rid 角色id
-     *
      * @return 为用户设置角色
      */
     @Override
@@ -110,7 +106,6 @@ public class UserServiceImpl implements IUserService {
      * 锁定账户
      *
      * @param user 用户信息
-     *
      * @return 修改后的用户信息
      */
     @Override

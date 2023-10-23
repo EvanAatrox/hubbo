@@ -1,6 +1,5 @@
 package cn.hubbo.utils.security;
 
-import cn.hubbo.utils.common.JsonUtils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -35,14 +34,14 @@ public final class JWTUtils {
      * @param claimInfo payLoad载荷信息
      * @return token
      */
-    public static String generateToken(String id, String claimInfo) {
+    public static String generateToken(String id, String username) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         return JWT.create()
                 .withIssuer(ISSUER_INFO)
                 .withJWTId(id)
                 .withSubject("哈勃")
-                .withPayload(claimInfo)
+                .withClaim("info", username)
                 .withIssuedAt(new Date())
                 .withExpiresAt(calendar.toInstant())
                 .withHeader(HEADER)
@@ -61,7 +60,8 @@ public final class JWTUtils {
         try {
             DecodedJWT decodedJWT = JWT.require(ALGORITHM).build().verify(token);
             String payload = decodedJWT.getPayload();
-            return (T) JsonUtils.getDefaultGson().fromJson(payload, cla);
+            //return (T) JsonUtils.getDefaultGson().fromJson("", cla);
+            return (T) decodedJWT.getClaim("info").toString();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
