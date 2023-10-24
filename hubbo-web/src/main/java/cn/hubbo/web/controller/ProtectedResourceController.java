@@ -3,6 +3,7 @@ package cn.hubbo.web.controller;
 import cn.hubbo.utils.lang.base.ClientInfo;
 import cn.hubbo.utils.web.ServletUtils;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ public class ProtectedResourceController {
 
 
     @GetMapping("/client/ip")
+    @PreAuthorize("hasAuthority('admin:create')")
     public ClientInfo clientInfo(HttpServletRequest request) {
         return ServletUtils.getClientInfo(request);
     }

@@ -20,7 +20,7 @@ import java.io.IOException;
 public class JwtTokenFilter extends OncePerRequestFilter {
 
 
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     public JwtTokenFilter(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;

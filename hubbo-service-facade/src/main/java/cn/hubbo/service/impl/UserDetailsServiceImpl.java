@@ -4,12 +4,17 @@ import cn.hubbo.common.to.SecurityUser;
 import cn.hubbo.domain.dos.User;
 import cn.hubbo.service.IUserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author 张晓华
@@ -32,7 +37,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (Objects.isNull(user)) {
             throw new UsernameNotFoundException("用户信息不存在");
         }
-        return new SecurityUser().setUserDetail(user);
+        SecurityUser securityUser = new SecurityUser().setUserDetail(user);
+        Set<GrantedAuthority> set = Stream.of("admin:create", "admin:update", "admin:delete").map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
+        securityUser.setAuthorities(set);
+        return securityUser;
     }
 
 }

@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +27,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -45,6 +45,8 @@ import java.util.List;
 public class SpringSecurityConfig {
 
     private UserDetailsService userDetailsService;
+
+    private AuthenticationConfiguration authenticationConfiguration;
 
 
     /**
@@ -68,36 +70,34 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager() throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationConfiguration configuration) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         List<String> ignorePathPatterns = List.of("/test/**", "/user/login");
-        FormAndJsonLoginFilter formAndJsonLoginFilter = new FormAndJsonLoginFilter(authenticationManager(configuration));
-        formAndJsonLoginFilter.setPostOnly(true);
-        formAndJsonLoginFilter.setFilterProcessesUrl("/user/login");
-        formAndJsonLoginFilter.setAllowSessionCreation(false);
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.NEVER))
                 .passwordManagement(AbstractHttpConfigurer::disable)
                 .anonymous(AbstractHttpConfigurer::disable)
                 .rememberMe(AbstractHttpConfigurer::disable)
                 .headers(AbstractHttpConfigurer::disable)
-                .authenticationManager(authenticationManager(configuration))
+                .authenticationManager(authenticationManager())
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorization -> authorization.requestMatchers(ignorePathPatterns.toArray(new String[]{}))
                         .permitAll()
                         .anyRequest()
                         .authenticated())
                 .authenticationProvider(authenticationProvider())
-                .exceptionHandling(web -> web.accessDeniedHandler(accessDeniedHandler())
-                        .authenticationEntryPoint(authenticationEntryPoint()))
-                .addFilterBefore(dynamicFilter(), FilterSecurityInterceptor.class)
+                //.exceptionHandling(web -> web
+                //.accessDeniedHandler(accessDeniedHandler())
+                //.authenticationEntryPoint(authenticationEntryPoint()))
+                //.addFilterBefore(dynamicFilter(), FilterSecurityInterceptor.class)
                 .addFilterBefore(oncePerRequestFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(loginFilter(authenticationManager(configuration)), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(loginFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 
@@ -116,6 +116,7 @@ public class SpringSecurityConfig {
         loginFilter.setPostOnly(true);
         loginFilter.setFilterProcessesUrl("/user/login");
         loginFilter.setAuthenticationManager(authenticationManager);
+        loginFilter.setAllowSessionCreation(false);
         return loginFilter;
     }
 
@@ -136,18 +137,15 @@ public class SpringSecurityConfig {
     }
 
 
-    @Bean
     public FilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource() {
         return new CustomFilterInvocationSecurityMetadataSource();
     }
 
 
-    @Bean
     public AccessDecisionManager accessDecisionManager() {
         return new AccessDecisionManagerImpl();
     }
 
-    @Bean
     public DynamicFilter dynamicFilter() {
         return new DynamicFilter(filterInvocationSecurityMetadataSource(), accessDecisionManager());
     }

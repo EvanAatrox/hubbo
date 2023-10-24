@@ -1,7 +1,7 @@
 package cn.hubbo.domain.dos;
 
-import cn.hubbo.domain.enumeration.GenderEnum;
 import cn.hubbo.domain.enumeration.AccountStatusEnum;
+import cn.hubbo.domain.enumeration.GenderEnum;
 import cn.hubbo.utils.annotation.json.Ignore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +18,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Comment;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +34,7 @@ import java.util.List;
 @Entity(name = "t_user")
 @Table(indexes = {@Index(name = "user_name_index", columnList = "user_name", unique = true),
         @Index(name = "phone_index", columnList = "phone", unique = true)})
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

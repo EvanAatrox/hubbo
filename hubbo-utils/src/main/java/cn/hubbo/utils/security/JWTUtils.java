@@ -61,7 +61,11 @@ public final class JWTUtils {
             DecodedJWT decodedJWT = JWT.require(ALGORITHM).build().verify(token);
             String payload = decodedJWT.getPayload();
             //return (T) JsonUtils.getDefaultGson().fromJson("", cla);
-            return (T) decodedJWT.getClaim("info").toString();
+            String info = String.valueOf(decodedJWT.getClaim("info"));
+            if (info.contains("\"")) {
+                info = info.replaceAll("\"", "");
+            }
+            return (T) info;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

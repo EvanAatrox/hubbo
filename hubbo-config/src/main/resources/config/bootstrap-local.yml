@@ -1,27 +1,33 @@
 spring:
   cloud:
     consul:
-      host: 192.168.10.39
+      host: ${server.host}
       port: 8500
       discovery:
         enabled: true
         heartbeat:
           enabled: true
-        service-name: hubbo
+        service-name: ${spring.application.name}
         metadata:
           version: 0.1
       config:
         enabled: true
         format: yaml
-        name: hubbo.yml
-        profile-separator: ','
+        profile-separator: '-'
+        # 所有的配置文件都在config目录下,以当前服务为例,当前服务可以读取到的配置有
+        # / 是由profile-separator: '-'决定的,默认是逗号
+        # /config/${spring.application.name}/${data-key}
+        # /config/${spring.application.name}-env/${data-key}
+        # /config/application/${data-key}
+        # /config/application-env/${data-key}
         prefixes:
-          - hubbo
+          - config
+        # 默认的context就是application  private @NotEmpty String defaultContext = "application";
         default-context: application
-        data-key: datasource
-
+        # 配置文件名,consul只会读取指定目录下指定名称的文件作为当前服务的配置文件
+        data-key: config
     vault:
-      host: 192.168.10.39
+      host: ${server.host}
       port: 8200
       scheme: http
       fail-fast: false

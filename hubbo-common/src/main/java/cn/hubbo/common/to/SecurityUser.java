@@ -1,17 +1,15 @@
 package cn.hubbo.common.to;
 
-import cn.hubbo.domain.dos.Role;
 import cn.hubbo.domain.dos.User;
 import cn.hubbo.domain.enumeration.AccountStatusEnum;
+import cn.hubbo.utils.annotation.json.Ignore;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.io.Serializable;
+import java.util.Set;
 
 /**
  * @author 张晓华
@@ -22,21 +20,14 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class SecurityUser implements UserDetails {
+public class SecurityUser implements UserDetails, Serializable {
 
 
     private User userDetail;
 
+    @Ignore
+    private Set<GrantedAuthority> authorities;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<Role> roles = userDetail.getRoles();
-        ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));   
-        }
-        return authorities;
-    }
 
     @Override
     public String getPassword() {

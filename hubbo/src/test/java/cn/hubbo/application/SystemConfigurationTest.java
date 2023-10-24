@@ -46,9 +46,15 @@ public class SystemConfigurationTest {
     public void readConfigurationAtSino() {
         String content = environment.getProperty("spring.cloud.consul.host");
         String url = environment.getProperty("spring.datasource.url");
+        String flag = environment.getProperty("spring.main.allow-circular-references");
+        String remark = environment.getProperty("test.content");
+        String uniqueServiceConfig = environment.getProperty("hubbo.test");
         System.out.println(content);
         System.out.println(url);
+        System.out.println(flag);
+        System.out.println(remark);
+        System.out.println(uniqueServiceConfig);
     }
-    
+
 
 }

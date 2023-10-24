@@ -3,6 +3,7 @@ package cn.hubbo.utils.web;
 import cn.hubbo.utils.common.JsonUtils;
 import cn.hubbo.utils.common.StrUtils;
 import cn.hubbo.utils.lang.base.ClientInfo;
+import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.google.common.net.MediaType;
 import com.google.gson.Gson;
@@ -43,7 +44,6 @@ public final class ServletUtils {
      * @param request 请求对象
      * @param cla     目标class
      * @param <T>     期望类型
-     *
      * @return 对象
      */
     @SuppressWarnings({"rawtypes", "unchecked", "unused"})
@@ -95,7 +95,6 @@ public final class ServletUtils {
 
     /**
      * @param request 请求
-     *
      * @return 客户端的IP地址
      */
     public static String getClientIP(ServletRequest request) {
@@ -107,7 +106,6 @@ public final class ServletUtils {
      *
      * @param request   请求
      * @param paramName 参数名
-     *
      * @return 获取参数值
      */
     public static String getParameterOrDefault(ServletRequest request, String paramName) {
@@ -119,18 +117,15 @@ public final class ServletUtils {
 
     /**
      * @param request 请求对象
-     *
      * @return 客户端的相关信息，IP,请求时间,URL,平台信息等
      */
     public static ClientInfo getClientInfo(HttpServletRequest request) {
+        UserAgent userAgent = UserAgentUtil.parse(StrUtils.ifNil(request.getHeader("User-Agent")));
         return new ClientInfo(request.getRemoteHost(),
                 request.getRequestURL().toString(),
                 StrUtils.ifNil(request.getHeader("Bearer Token")),
-                new Date(), StrUtils.ifNil(request.getHeader("submitToken")),
-                UserAgentUtil.parse(StrUtils.ifNil(request.getHeader("User-Agent"))));
+                new Date(), StrUtils.ifNil(request.getHeader("submitToken")));
     }
-    
-    
 
 
 }
