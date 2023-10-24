@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: sino
   main:
     allow-circular-references: true
     allow-bean-definition-overriding: true

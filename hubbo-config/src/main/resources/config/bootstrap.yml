@@ -1,37 +1,5 @@
 spring:
   application:
     name: hubbo
-  
-  cloud:
-    consul:
-      host: 192.168.10.39
-      port: 8500
-      discovery:
-        enabled: true
-        heartbeat:
-          enabled: true
-        service-name: hubbo
-        metadata:
-          version: 0.1
-      config:
-        enabled: true
-        format: yaml
-        name: hubbo.yml
-        profile-separator: ','
-        prefixes:
-          - hubbo
-        default-context: application
-        data-key: datasource
-
-    vault:
-      host: 192.168.10.39
-      port: 8200
-      scheme: http
-      fail-fast: false
-      authentication: token
-      token: hvs.riwXjPbD3fq10cRLdi5H0y5S
-      kv:
-        enabled: true
-        profile-separator: /
-        backend: web
-        application-name: hubbo/securt
+  profiles:
+    active: sino

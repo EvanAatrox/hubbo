@@ -42,5 +42,13 @@ public class SystemConfigurationTest {
         System.out.println(password);
     }
 
+    @Test
+    public void readConfigurationAtSino() {
+        String content = environment.getProperty("spring.cloud.consul.host");
+        String url = environment.getProperty("spring.datasource.url");
+        System.out.println(content);
+        System.out.println(url);
+    }
+    
 
 }
