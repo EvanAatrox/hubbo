@@ -10,6 +10,7 @@ import cn.hubbo.security.handler.AuthenticationEntryPointImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -47,6 +48,8 @@ public class SpringSecurityConfig {
     private UserDetailsService userDetailsService;
 
     private AuthenticationConfiguration authenticationConfiguration;
+
+    private RedisTemplate<String, Object> redisTemplate;
 
 
     /**
@@ -112,7 +115,7 @@ public class SpringSecurityConfig {
 
     @Bean
     public FormAndJsonLoginFilter loginFilter(AuthenticationManager authenticationManager) {
-        FormAndJsonLoginFilter loginFilter = new FormAndJsonLoginFilter(authenticationManager);
+        FormAndJsonLoginFilter loginFilter = new FormAndJsonLoginFilter(authenticationManager, redisTemplate);
         loginFilter.setPostOnly(true);
         loginFilter.setFilterProcessesUrl("/user/login");
         loginFilter.setAuthenticationManager(authenticationManager);
@@ -133,7 +136,7 @@ public class SpringSecurityConfig {
 
     @Bean
     public OncePerRequestFilter oncePerRequestFilter() {
-        return new JwtTokenFilter(userDetailsService);
+        return new JwtTokenFilter(redisTemplate);
     }
 
 
@@ -141,7 +144,7 @@ public class SpringSecurityConfig {
         return new CustomFilterInvocationSecurityMetadataSource();
     }
 
-    
+
     public AccessDecisionManager accessDecisionManager() {
         return new AccessDecisionManagerImpl();
     }

@@ -41,6 +41,7 @@
         <hutool.version>5.8.22</hutool.version>
         <mysql.connector.version>8.0.31</mysql.connector.version>
         <hutool.version>5.8.18</hutool.version>
+        <commons.pool.version>2.11.1</commons.pool.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -1,6 +1,6 @@
 package cn.hubbo.service.impl;
 
-import cn.hubbo.common.to.SecurityUser;
+import cn.hubbo.common.domain.to.SecurityUser;
 import cn.hubbo.domain.dos.User;
 import cn.hubbo.service.IUserService;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 package cn.hubbo.web.controller;
 
-import cn.hubbo.common.to.SecurityUser;
+import cn.hubbo.common.domain.to.SecurityUser;
 import cn.hubbo.utils.lang.base.ClientInfo;
 import cn.hubbo.utils.web.ServletUtils;
 import jakarta.servlet.http.HttpServletRequest;

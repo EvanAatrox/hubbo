@@ -1,8 +1,14 @@
 package cn.hubbo.configuration.web;
 
+import cn.hubbo.common.json.GsonRedisSerializer;
 import cn.hubbo.utils.common.JsonUtils;
+import com.google.gson.Gson;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 
@@ -23,6 +29,27 @@ public class WebConfiguration {
     @Bean
     public HttpMessageConverter<Object> httpMessageConverter() {
         return new GsonHttpMessageConverter(JsonUtils.getStrategiesGson());
+    }
+
+
+    @Bean
+    public Gson gson() {
+        return JsonUtils.getStrategiesGson();
+    }
+
+    @ConditionalOnMissingBean(name = "redisTemplate")
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        RedisSerializer<String> keySerializer = RedisSerializer.string();
+        GsonRedisSerializer<Object> valueSerializer = new GsonRedisSerializer<>(new Object());
+        redisTemplate.setKeySerializer(keySerializer);
+        redisTemplate.setHashKeySerializer(keySerializer);
+        redisTemplate.setValueSerializer(valueSerializer);
+        redisTemplate.setHashValueSerializer(valueSerializer);
+        redisTemplate.setExposeConnection(true);
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        return redisTemplate;
     }
 
 

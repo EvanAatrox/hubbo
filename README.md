@@ -26,3 +26,10 @@ Spring Cloud 2022
 <br>
 <a href="https://www.hubbo.cn">部署地址</a>
 
+## 开发计划
+
+### 任务
+
+<b>JWT工具类完善</b>
+
+

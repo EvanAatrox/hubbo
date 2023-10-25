@@ -1,4 +1,4 @@
-package cn.hubbo.common.to;
+package cn.hubbo.common.domain.to;
 
 import cn.hubbo.domain.dos.User;
 import cn.hubbo.domain.enumeration.AccountStatusEnum;

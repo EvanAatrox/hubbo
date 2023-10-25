@@ -1,20 +1,22 @@
 package cn.hubbo.security.filter;
 
-import cn.hubbo.common.to.SecurityUser;
+import cn.hubbo.common.constant.RedisConstants;
+import cn.hubbo.common.domain.to.SecurityUser;
 import cn.hubbo.domain.dos.User;
 import cn.hubbo.domain.enumeration.ResponseStatusEnum;
 import cn.hubbo.domain.vo.LoginUserVO;
 import cn.hubbo.domain.vo.Result;
-import cn.hubbo.utils.common.JsonUtils;
 import cn.hubbo.utils.security.JWTUtils;
 import cn.hubbo.utils.web.ServletUtils;
-import com.google.gson.Gson;
+import cn.hutool.core.util.IdUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
@@ -24,8 +26,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * @author 张晓华
@@ -35,17 +37,28 @@ import java.util.UUID;
  * @Copyright © 2023-2025 版权所有，未经授权均为剽窃，作者保留一切权利
  */
 @Slf4j
+@SuppressWarnings({"unused"})
 public class FormAndJsonLoginFilter extends UsernamePasswordAuthenticationFilter {
 
 
     private final AuthenticationManager authenticationManager;
 
 
-    public FormAndJsonLoginFilter(AuthenticationManager authenticationManager) {
+    private final RedisTemplate<String, Object> redisTemplate;
+
+
+    private final ValueOperations<String, Object> ops;
+
+    /* 用户token信息缓存时间 */
+    private Duration duration = Duration.ofDays(1);
+
+    public FormAndJsonLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, Object> redisTemplate) {
         super(authenticationManager);
         super.setPostOnly(true);
         super.setFilterProcessesUrl("/user/login");
         this.authenticationManager = authenticationManager;
+        this.redisTemplate = redisTemplate;
+        this.ops = redisTemplate.opsForValue();
     }
 
 
@@ -77,7 +90,7 @@ public class FormAndJsonLoginFilter extends UsernamePasswordAuthenticationFilter
             String username = ServletUtils.getParameterOrDefault(request, "username");
             String rawPasswd = ServletUtils.getParameterOrDefault(request, "rawPasswd");
             if (StringUtils.isBlank(username) || StringUtils.isEmpty(rawPasswd)) {
-                throw new InsufficientAuthenticationException("登录信息不完整"); 
+                throw new InsufficientAuthenticationException("登录信息不完整");
             }
             authenticationToken = UsernamePasswordAuthenticationToken.unauthenticated(username, rawPasswd);
         }
@@ -101,9 +114,10 @@ public class FormAndJsonLoginFilter extends UsernamePasswordAuthenticationFilter
         if (authResult instanceof UsernamePasswordAuthenticationToken authenticationToken) {
             if (authenticationToken.getPrincipal() instanceof SecurityUser securityUser) {
                 User userDetail = securityUser.getUserDetail();
-                Gson strategiesGson = JsonUtils.getStrategiesGson();
-                // 暂时替换成用户名
-                String token = JWTUtils.generateToken(UUID.randomUUID().toString(), userDetail.getUsername());
+                ops.set(RedisConstants.USER_TOKEN_PREFIX.concat(userDetail.getUsername()), userDetail, duration);
+                String uuid = IdUtil.fastUUID();
+                String token = JWTUtils.generateToken(uuid, userDetail.getUsername());
+                ops.set(RedisConstants.USER_TOKEN_CACHE_PREFIX.concat(uuid), token, duration);
                 Result result = new Result(ResponseStatusEnum.SUCCESS).add("token", token);
                 ServletUtils.reposeObjectWithJson(response, result);
             }
