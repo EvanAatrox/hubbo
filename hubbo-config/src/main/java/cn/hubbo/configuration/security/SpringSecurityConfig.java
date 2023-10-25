@@ -92,9 +92,9 @@ public class SpringSecurityConfig {
                         .anyRequest()
                         .authenticated())
                 .authenticationProvider(authenticationProvider())
-                //.exceptionHandling(web -> web
-                //.accessDeniedHandler(accessDeniedHandler())
-                //.authenticationEntryPoint(authenticationEntryPoint()))
+                .exceptionHandling(web -> web
+                        .accessDeniedHandler(accessDeniedHandler())
+                        .authenticationEntryPoint(authenticationEntryPoint()))
                 //.addFilterBefore(dynamicFilter(), FilterSecurityInterceptor.class)
                 .addFilterBefore(oncePerRequestFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(loginFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
@@ -141,7 +141,7 @@ public class SpringSecurityConfig {
         return new CustomFilterInvocationSecurityMetadataSource();
     }
 
-
+    
     public AccessDecisionManager accessDecisionManager() {
         return new AccessDecisionManagerImpl();
     }

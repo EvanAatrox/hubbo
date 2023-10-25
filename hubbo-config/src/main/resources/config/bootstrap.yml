@@ -2,7 +2,7 @@ spring:
   application:
     name: hubbo
   profiles:
-    active: local
+    active: sino
 
 server:
-  host: 192.168.10.39
+  host: 192.168.184.128

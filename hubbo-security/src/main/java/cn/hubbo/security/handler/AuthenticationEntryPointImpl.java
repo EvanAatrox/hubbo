@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AccountStatusException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
@@ -34,6 +35,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
      * @param request       请求
      * @param response      响应
      * @param authException 异常信息
+     *
      * @throws IOException      异常信息
      * @throws ServletException 异常信息
      */
@@ -52,6 +54,8 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
             detailMessage = "账号已经被锁定,无法进行操作";
         } else if (authException instanceof CaptchaNotValidException) {
             detailMessage = "请检查验证码是否有误";
+        } else if (authException instanceof AuthenticationCredentialsNotFoundException) {
+            detailMessage = "无权限访问保护资源";
         }
         addRequestToRestrictedAccessList(request);
         Result result = new Result(ResponseStatusEnum.ERROR).add("detail", detailMessage);

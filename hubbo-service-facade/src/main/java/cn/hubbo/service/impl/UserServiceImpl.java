@@ -10,6 +10,7 @@ import cn.hubbo.service.IUserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -39,6 +40,7 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * @param id 用户id
+     *
      * @return 用户信息
      */
     @Override
@@ -48,6 +50,7 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * @param user 保存的user对象
+     *
      * @return 持久化后的user对象
      */
     @Override
@@ -60,6 +63,7 @@ public class UserServiceImpl implements IUserService {
      * 根据用户名查询用户信息
      *
      * @param username 用户名
+     *
      * @return 用户信息
      */
     @Override
@@ -68,14 +72,16 @@ public class UserServiceImpl implements IUserService {
         if (Objects.isNull(user)) {
             return null;
         }
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(user.getUpdateTime());
-        calendar.add(Calendar.DAY_OF_MONTH, 1);
-        if (user.getAccountStatus().equals(AccountStatusEnum.LOCKED) && calendar.getTime().before(new Date())) {
-            user.setAccountStatus(AccountStatusEnum.DEFAULT);
-            user.setUpdateTime(new Date());
-            log.info("解锁当前账户{}", user);
-            return this.userDao.save(user);
+        if (!Objects.isNull(user.getUpdateTime())) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(user.getUpdateTime());
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            if (user.getAccountStatus().equals(AccountStatusEnum.LOCKED) && calendar.getTime().before(new Date())) {
+                user.setAccountStatus(AccountStatusEnum.DEFAULT);
+                user.setUpdateTime(new Date());
+                log.info("解锁当前账户{}", user);
+                return this.userDao.save(user);
+            }
         }
         return user;
     }
@@ -85,6 +91,7 @@ public class UserServiceImpl implements IUserService {
      *
      * @param uid 用户id
      * @param rid 角色id
+     *
      * @return 为用户设置角色
      */
     @Override
@@ -106,6 +113,7 @@ public class UserServiceImpl implements IUserService {
      * 锁定账户
      *
      * @param user 用户信息
+     *
      * @return 修改后的用户信息
      */
     @Override
@@ -115,5 +123,18 @@ public class UserServiceImpl implements IUserService {
         return userDao.save(user);
     }
 
+
+    /**
+     * @param user 需要更新的用户信息
+     *
+     * @return 更新后的用户信息
+     */
+    @Override
+    public User updateUserInfo(User user) {
+        Assert.notNull(user, "更新的对象不允许为空");
+        Assert.notNull(user.getUserId(), "需要更新的对象的ID不允许为空" + user);
+        return save(user);
+    }
+    
 
 }

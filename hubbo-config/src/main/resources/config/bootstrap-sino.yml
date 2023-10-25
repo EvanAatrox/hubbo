@@ -1,30 +1,30 @@
 spring:  
   cloud:
     consul:
-      host: 192.168.184.128
+      host: ${server.host}
       port: 8500
       discovery:
         enabled: true
         heartbeat:
           enabled: true
-        service-name: hubbo
+        service-name: ${spring.application.name}
         metadata:
           version: 0.1
       config:
         enabled: true
         format: yaml
         #        profileSeparator profiles配置分隔符,默认为‘,’
-        profile-separator: ','
+        profile-separator: '-'
         #prefix 设置配的基本目录，比如config
         prefixes:
           - config
         #defaultContext 设置默认的配置，被所有的应用读取
         default-context: application
         # date-key为应用配置的key名字，值为整个应用配置的字符串。
-        data-key: datasource
+        data-key: config
 
     vault:
-      host: 192.168.184.128
+      host: ${server.host}
       port: 8200
       scheme: http
       fail-fast: false

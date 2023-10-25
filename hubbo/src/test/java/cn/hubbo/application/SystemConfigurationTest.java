@@ -19,7 +19,7 @@ public class SystemConfigurationTest {
 
 
     @Test
-    @TestCase("Vault配置读取测试")
+    @TestCase("Vault加密配置读取测试")
     public void testReadApplicationConfig() {
         String password = environment.getProperty("mysql.password");
         String testContent = environment.getProperty("mysql.desc");
@@ -29,6 +29,7 @@ public class SystemConfigurationTest {
 
 
     @Test
+    @TestCase("Consul测试")
     public void testReadConfig() {
         String code = environment.getProperty("spring.datasource.driver-class-name");
         System.out.println(code);
@@ -43,6 +44,7 @@ public class SystemConfigurationTest {
     }
 
     @Test
+    @TestCase("配置信息读取")
     public void readConfigurationAtSino() {
         String content = environment.getProperty("spring.cloud.consul.host");
         String url = environment.getProperty("spring.datasource.url");
@@ -54,6 +56,15 @@ public class SystemConfigurationTest {
         System.out.println(flag);
         System.out.println(remark);
         System.out.println(uniqueServiceConfig);
+    }
+
+    @Test
+    @TestCase("读取sino服务的公共配置信息")
+    public void testReadSinoConfigInfo() {
+        String commonInfo = environment.getProperty("application.common");
+        String testContent = environment.getProperty("hubbo.test");
+        System.out.println(commonInfo);
+        System.out.println(testContent);
     }
 
 

@@ -61,4 +61,12 @@ public interface IUserService {
      */
     User lockAccount(User user);
 
+
+    /**
+     * @param user 需要更新的用户信息
+     *
+     * @return 更新后的用户信息
+     */
+    User updateUserInfo(User user);
+
 }

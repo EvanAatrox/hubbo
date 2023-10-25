@@ -77,7 +77,7 @@ public class FormAndJsonLoginFilter extends UsernamePasswordAuthenticationFilter
             String username = ServletUtils.getParameterOrDefault(request, "username");
             String rawPasswd = ServletUtils.getParameterOrDefault(request, "rawPasswd");
             if (StringUtils.isBlank(username) || StringUtils.isEmpty(rawPasswd)) {
-                throw new InsufficientAuthenticationException("登录信息不完整");
+                throw new InsufficientAuthenticationException("登录信息不完整"); 
             }
             authenticationToken = UsernamePasswordAuthenticationToken.unauthenticated(username, rawPasswd);
         }
