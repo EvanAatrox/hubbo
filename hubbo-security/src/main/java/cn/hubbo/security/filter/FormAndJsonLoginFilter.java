@@ -1,12 +1,14 @@
 package cn.hubbo.security.filter;
 
 import cn.hubbo.common.constant.RedisConstants;
+import cn.hubbo.common.domain.to.JWTObject;
+import cn.hubbo.common.domain.to.JWTTokenBuilder;
 import cn.hubbo.common.domain.to.SecurityUser;
+import cn.hubbo.common.domain.to.properties.JWTProperties;
 import cn.hubbo.domain.dos.User;
 import cn.hubbo.domain.enumeration.ResponseStatusEnum;
 import cn.hubbo.domain.vo.LoginUserVO;
 import cn.hubbo.domain.vo.Result;
-import cn.hubbo.utils.security.JWTUtils;
 import cn.hubbo.utils.web.ServletUtils;
 import cn.hutool.core.util.IdUtil;
 import jakarta.servlet.FilterChain;
@@ -49,16 +51,22 @@ public class FormAndJsonLoginFilter extends UsernamePasswordAuthenticationFilter
 
     private final ValueOperations<String, Object> ops;
 
+
     /* 用户token信息缓存时间 */
     private Duration duration = Duration.ofDays(1);
 
-    public FormAndJsonLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, Object> redisTemplate) {
+
+    /* Jwt配置信息 */
+    private JWTProperties jwtProperties;
+
+    public FormAndJsonLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, Object> redisTemplate, JWTProperties jwtProperties) {
         super(authenticationManager);
         super.setPostOnly(true);
         super.setFilterProcessesUrl("/user/login");
         this.authenticationManager = authenticationManager;
         this.redisTemplate = redisTemplate;
         this.ops = redisTemplate.opsForValue();
+        this.jwtProperties = jwtProperties;
     }
 
 
@@ -116,9 +124,14 @@ public class FormAndJsonLoginFilter extends UsernamePasswordAuthenticationFilter
                 User userDetail = securityUser.getUserDetail();
                 ops.set(RedisConstants.USER_TOKEN_PREFIX.concat(userDetail.getUsername()), userDetail, duration);
                 String uuid = IdUtil.fastUUID();
-                String token = JWTUtils.generateToken(uuid, userDetail.getUsername());
-                ops.set(RedisConstants.USER_TOKEN_CACHE_PREFIX.concat(uuid), token, duration);
-                Result result = new Result(ResponseStatusEnum.SUCCESS).add("token", token);
+                JWTObject jwtObject = JWTTokenBuilder.create()
+                        .id(uuid)
+                        .claim(userDetail.getUsername())
+                        .timeout(jwtProperties.getDuration())
+                        .sign(jwtProperties.getSecretKey()).build();
+                // TODO 将token信息存入redis中,后期token续期需要使用到,即使token的值一直在变化,但是token的uuid应该始终不变了
+                ops.set(RedisConstants.USER_TOKEN_CACHE_PREFIX.concat(uuid), jwtObject.getToken(), duration);
+                Result result = new Result(ResponseStatusEnum.SUCCESS).add("token", jwtObject.getToken());
                 ServletUtils.reposeObjectWithJson(response, result);
             }
         } else {

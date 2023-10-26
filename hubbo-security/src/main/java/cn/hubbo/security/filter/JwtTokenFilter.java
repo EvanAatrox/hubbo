@@ -1,8 +1,12 @@
 package cn.hubbo.security.filter;
 
+import cn.hubbo.common.constant.RedisConstants;
 import cn.hubbo.common.constant.WebConstants;
+import cn.hubbo.common.domain.to.JWTObject;
+import cn.hubbo.common.domain.to.JWTTokenBuilder;
 import cn.hubbo.common.domain.to.SecurityUser;
-import cn.hubbo.utils.security.JWTUtils;
+import cn.hubbo.common.domain.to.properties.JWTProperties;
+import cn.hubbo.domain.dos.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,9 +29,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private ValueOperations<String, Object> ops;
 
-    public JwtTokenFilter(RedisTemplate<String, Object> redisTemplate) {
+    private JWTProperties jwtProperties;
+
+    public JwtTokenFilter(RedisTemplate<String, Object> redisTemplate, JWTProperties jwtProperties) {
         this.redisTemplate = redisTemplate;
         this.ops = redisTemplate.opsForValue();
+        this.jwtProperties = jwtProperties;
     }
 
     @Override
@@ -36,11 +43,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         if (StringUtils.isNotBlank(headerValue)) {
             // 验证token
             String token = headerValue.replace(WebConstants.TOKEN_VALUE_PREFIX, "");
-            // 此处可能会抛出异常
-            SecurityUser securityUser = (SecurityUser) ops.get(JWTUtils.verifyToken(token, String.class));
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            JWTObject jwtObject = JWTTokenBuilder.parseJWTToken(token, jwtProperties);
+            if (jwtObject.isLegal()) {
+                String uuid = jwtObject.getUuid();
+                User user = (User) this.ops.get(RedisConstants.USER_TOKEN_PREFIX.concat(jwtObject.getUsername()));
+                SecurityUser securityUser = new SecurityUser();
+                securityUser.setUserDetail(user);
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
         }
         filterChain.doFilter(request, response);
     }

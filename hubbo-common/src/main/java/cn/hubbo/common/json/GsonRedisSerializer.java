@@ -1,6 +1,9 @@
 package cn.hubbo.common.json;
 
 import cn.hubbo.utils.common.JsonUtils;
+import cn.hubbo.utils.reflect.ReflectUtils;
+import com.google.gson.internal.LinkedTreeMap;
+import org.springframework.cglib.beans.BeanMap;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
@@ -32,7 +35,7 @@ public class GsonRedisSerializer<T> implements RedisSerializer<T> {
         if (Objects.isNull(t)) {
             return arr;
         }
-        return JsonUtils.getDefaultGson().toJson(t).getBytes(StandardCharsets.UTF_8);
+        return JsonUtils.getStrategiesGson().toJson(t, cla).getBytes(StandardCharsets.UTF_8);
     }
 
     @SuppressWarnings({"unchecked"})
@@ -41,7 +44,17 @@ public class GsonRedisSerializer<T> implements RedisSerializer<T> {
         if (Objects.isNull(bytes) || bytes.length == 0) {
             return null;
         }
-        return (T) JsonUtils.getDefaultGson().fromJson(new String(bytes, StandardCharsets.UTF_8), cla);
+        // TODO 反序列化错误待解决
+        LinkedTreeMap treeMap = JsonUtils.getStrategiesGson().fromJson(new String(bytes, StandardCharsets.UTF_8), LinkedTreeMap.class);
+        Object obj = null;
+        try {
+            obj = ReflectUtils.getUnsafeInstance().allocateInstance(cla);
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        }
+        BeanMap map = BeanMap.create(obj);
+        map.putAll(treeMap);
+        return (T) map;
     }
 
 }

@@ -38,7 +38,7 @@ public class JWTProperties {
 
     /* token的有效期,单位为秒 */
     @DurationUnit(ChronoUnit.SECONDS)
-    private Duration interval;
+    private Duration duration;
 
 
     /* token加密的密钥 */

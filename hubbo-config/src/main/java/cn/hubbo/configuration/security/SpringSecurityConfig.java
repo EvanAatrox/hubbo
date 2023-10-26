@@ -1,5 +1,6 @@
 package cn.hubbo.configuration.security;
 
+import cn.hubbo.common.domain.to.properties.JWTProperties;
 import cn.hubbo.security.filter.AccessDecisionManagerImpl;
 import cn.hubbo.security.filter.CustomFilterInvocationSecurityMetadataSource;
 import cn.hubbo.security.filter.DynamicFilter;
@@ -50,6 +51,8 @@ public class SpringSecurityConfig {
     private AuthenticationConfiguration authenticationConfiguration;
 
     private RedisTemplate<String, Object> redisTemplate;
+
+    private JWTProperties jwtProperties;
 
 
     /**
@@ -115,7 +118,7 @@ public class SpringSecurityConfig {
 
     @Bean
     public FormAndJsonLoginFilter loginFilter(AuthenticationManager authenticationManager) {
-        FormAndJsonLoginFilter loginFilter = new FormAndJsonLoginFilter(authenticationManager, redisTemplate);
+        FormAndJsonLoginFilter loginFilter = new FormAndJsonLoginFilter(authenticationManager, redisTemplate, jwtProperties);
         loginFilter.setPostOnly(true);
         loginFilter.setFilterProcessesUrl("/user/login");
         loginFilter.setAuthenticationManager(authenticationManager);
@@ -136,7 +139,7 @@ public class SpringSecurityConfig {
 
     @Bean
     public OncePerRequestFilter oncePerRequestFilter() {
-        return new JwtTokenFilter(redisTemplate);
+        return new JwtTokenFilter(redisTemplate, jwtProperties);
     }
 
 
