@@ -8,18 +8,18 @@ import lombok.Getter;
  * @usage 当前类的用途描述
  */
 @Getter
-public enum ResponseStatusEnum {
+public enum ResponseStatusEnum implements BasicEnum<Integer> {
 
     SUCCESS(200, "OK"),
     ERROR(500, "Error");
-    
+
 
     private final Integer code;
-    private final String msg;
+    private final String desc;
 
-    ResponseStatusEnum(Integer code, String msg) {
+    ResponseStatusEnum(Integer code, String desc) {
         this.code = code;
-        this.msg = msg;
+        this.desc = desc;
     }
 
     @Override

@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 
 @Getter
-public enum AccountStatusEnum {
+public enum AccountStatusEnum implements BasicEnum<Integer> {
 
     LOCKED(0, "锁定"),
     DEFAULT(1, "正常");

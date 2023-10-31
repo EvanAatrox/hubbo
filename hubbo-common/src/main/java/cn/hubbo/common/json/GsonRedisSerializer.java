@@ -1,9 +1,6 @@
 package cn.hubbo.common.json;
 
 import cn.hubbo.utils.common.JsonUtils;
-import cn.hubbo.utils.reflect.ReflectUtils;
-import com.google.gson.internal.LinkedTreeMap;
-import org.springframework.cglib.beans.BeanMap;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
@@ -44,17 +41,8 @@ public class GsonRedisSerializer<T> implements RedisSerializer<T> {
         if (Objects.isNull(bytes) || bytes.length == 0) {
             return null;
         }
-        // TODO 反序列化错误待解决
-        LinkedTreeMap treeMap = JsonUtils.getStrategiesGson().fromJson(new String(bytes, StandardCharsets.UTF_8), LinkedTreeMap.class);
-        Object obj = null;
-        try {
-            obj = ReflectUtils.getUnsafeInstance().allocateInstance(cla);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        }
-        BeanMap map = BeanMap.create(obj);
-        map.putAll(treeMap);
-        return (T) map;
+        String jsonStr = new String(bytes, StandardCharsets.UTF_8);
+        return (T) JsonUtils.getStrategiesGson().fromJson(jsonStr, cla);
     }
 
 }

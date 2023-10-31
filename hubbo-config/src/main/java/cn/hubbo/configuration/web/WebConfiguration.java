@@ -3,6 +3,7 @@ package cn.hubbo.configuration.web;
 import cn.hubbo.common.json.GsonRedisSerializer;
 import cn.hubbo.utils.common.JsonUtils;
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,9 @@ import org.springframework.http.converter.json.GsonHttpMessageConverter;
  */
 @Configuration
 public class WebConfiguration {
+    
+    @Value("${spring.data.redis.password}")
+    private String pass;
 
 
     /**
