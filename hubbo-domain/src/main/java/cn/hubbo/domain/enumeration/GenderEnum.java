@@ -1,5 +1,6 @@
 package cn.hubbo.domain.enumeration;
 
+import cn.hubbo.utils.common.json.BasicEnum;
 import lombok.Getter;
 
 /**

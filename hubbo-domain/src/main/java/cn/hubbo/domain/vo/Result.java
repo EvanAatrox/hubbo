@@ -29,7 +29,7 @@ public class Result {
     }
 
     public Result(ResponseStatusEnum responseStatusEnum) {
-        this(responseStatusEnum.getCode(), responseStatusEnum.getMsg());
+        this(responseStatusEnum.getCode(), responseStatusEnum.getDesc());
     }
 
     private Result(Integer code, String msg) {
