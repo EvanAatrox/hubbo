@@ -1,7 +1,7 @@
 package cn.hubbo.unit;
 
 import cn.hubbo.domain.dos.User;
-import cn.hubbo.utils.common.JsonUtils;
+import cn.hubbo.utils.common.base.JsonUtils;
 import cn.hubbo.utils.common.security.JWTUtils;
 import org.junit.jupiter.api.Test;
 

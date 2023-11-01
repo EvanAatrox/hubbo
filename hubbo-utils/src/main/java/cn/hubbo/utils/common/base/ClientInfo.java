@@ -1,4 +1,4 @@
-package cn.hubbo.utils.lang.base;
+package cn.hubbo.utils.common.base;
 
 import java.util.Date;
 

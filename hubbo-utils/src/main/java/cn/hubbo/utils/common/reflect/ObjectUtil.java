@@ -1,15 +1,14 @@
-package cn.hubbo.utils.reflect;
+package cn.hubbo.utils.common.reflect;
 
-import cn.hubbo.utils.common.CollectionUtils;
-import cn.hubbo.utils.common.StrUtils;
-import cn.hubbo.utils.lang.base.FieldObject;
+import cn.hubbo.utils.common.base.CollectionUtils;
+import cn.hubbo.utils.common.base.FieldObject;
+import cn.hubbo.utils.common.base.StrUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -39,7 +38,6 @@ public class ObjectUtil {
      * 要求必须存在属性对应标准的get set函数
      *
      * @param cla 目标Class
-     *
      * @return 该类中的所有属性，不包含父类的属性
      */
     @SuppressWarnings({"all"})
@@ -71,7 +69,6 @@ public class ObjectUtil {
      * @param target    目标对象
      * @param fieldName 属性名
      * @param <V>       期望的类型
-     *
      * @return 获取对象指定属性的值
      */
     @SuppressWarnings({"all"})
@@ -125,7 +122,6 @@ public class ObjectUtil {
 
     /**
      * @param cla 目标Class
-     *
      * @return 获取Class所有的属性
      */
     public List<String> keys(Class cla) {

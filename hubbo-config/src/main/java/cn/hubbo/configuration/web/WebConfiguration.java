@@ -1,7 +1,7 @@
 package cn.hubbo.configuration.web;
 
 import cn.hubbo.common.json.GsonRedisSerializer;
-import cn.hubbo.utils.common.JsonUtils;
+import cn.hubbo.utils.common.base.JsonUtils;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

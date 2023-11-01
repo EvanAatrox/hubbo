@@ -1,4 +1,4 @@
-package cn.hubbo.utils.system;
+package cn.hubbo.utils.common.system;
 
 import cn.hutool.system.oshi.CpuInfo;
 import cn.hutool.system.oshi.OshiUtil;
@@ -9,15 +9,14 @@ import cn.hutool.system.oshi.OshiUtil;
  * @usage 系统工具类，如系统负载，进程相关信息
  */
 public final class SystemUtils {
-    
-    
+
+
     public static void loadInfo() {
         CpuInfo cpuInfo = OshiUtil.getCpuInfo();
         System.out.println(cpuInfo);
         String cpuModel = cpuInfo.getCpuModel();
         System.out.println(cpuModel);
     }
-    
-    
-    
+
+
 }

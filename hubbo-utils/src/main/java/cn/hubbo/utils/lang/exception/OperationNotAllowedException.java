@@ -1,11 +1,11 @@
-package cn.hubbo.utils.lang;
+package cn.hubbo.utils.lang.exception;
 
 /**
  * @author 张晓华
  * @date 2023-10-20 09:58
  * @usage 当前类的用途描述
  */
-public class OperationNotAllowedException extends UnSupportedException{
+public class OperationNotAllowedException extends UnSupportedException {
 
     public OperationNotAllowedException(String s) {
         super(s);
@@ -18,6 +18,6 @@ public class OperationNotAllowedException extends UnSupportedException{
     public OperationNotAllowedException(Throwable cause) {
         super(cause);
     }
-    
-    
+
+
 }

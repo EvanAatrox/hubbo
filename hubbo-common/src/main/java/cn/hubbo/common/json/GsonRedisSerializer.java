@@ -1,6 +1,6 @@
 package cn.hubbo.common.json;
 
-import cn.hubbo.utils.common.JsonUtils;
+import cn.hubbo.utils.common.base.JsonUtils;
 import cn.hubbo.utils.common.json.GsonEntity;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

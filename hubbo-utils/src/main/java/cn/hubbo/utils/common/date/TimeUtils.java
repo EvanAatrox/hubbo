@@ -1,4 +1,4 @@
-package cn.hubbo.utils.date;
+package cn.hubbo.utils.common.date;
 
 import java.util.Objects;
 
@@ -11,6 +11,7 @@ public final class TimeUtils {
 
     /**
      * 统计单次任务的执行时间
+     *
      * @param runnable 可执行的任务
      * @return 执行时间
      */
@@ -21,7 +22,7 @@ public final class TimeUtils {
         long end = System.currentTimeMillis();
         return end - start;
     }
-    
+
     public static Long execute(Runnable runnable, int repeatTimes) {
         long start = System.currentTimeMillis();
         for (int i = 0; i < repeatTimes; i++) {
@@ -30,9 +31,6 @@ public final class TimeUtils {
         long end = System.currentTimeMillis();
         return end - start;
     }
-    
-    
-    
-    
-    
+
+
 }

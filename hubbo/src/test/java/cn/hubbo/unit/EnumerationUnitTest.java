@@ -5,7 +5,7 @@ import cn.hubbo.domain.enumeration.AccountStatusEnum;
 import cn.hubbo.domain.enumeration.GenderEnum;
 import cn.hubbo.domain.enumeration.ResponseStatusEnum;
 import cn.hubbo.utils.common.annotation.test.TestCase;
-import cn.hubbo.utils.common.JsonUtils;
+import cn.hubbo.utils.common.base.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;

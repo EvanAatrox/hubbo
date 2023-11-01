@@ -1,4 +1,4 @@
-package cn.hubbo.utils.common;
+package cn.hubbo.utils.common.base;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,7 +16,6 @@ public final class StrUtils {
      * 如果为空则返回空字符串以避免空指针
      *
      * @param str 字符串
-     *
      * @return 本身或者空字符串
      */
     public static String ifNil(String str) {
@@ -29,7 +28,6 @@ public final class StrUtils {
      *
      * @param str   字符串
      * @param index 期望的索引
-     *
      * @return 指定索引位置的字符
      */
     public static String index(String str, int index) {
@@ -41,7 +39,6 @@ public final class StrUtils {
      *
      * @param str   字符串
      * @param index 索引
-     *
      * @return 转大写
      */
     public static String upper(String str, int index) {
@@ -55,7 +52,6 @@ public final class StrUtils {
 
     /**
      * @param str 字符串
-     *
      * @return 大写后的字符串
      */
     public static String upper(String str) {
@@ -65,7 +61,5 @@ public final class StrUtils {
         return upper(str, -1);
     }
 
-    
-    
-    
+
 }

@@ -3,7 +3,7 @@ package cn.hubbo.security.handler;
 import cn.hubbo.common.exception.security.CaptchaNotValidException;
 import cn.hubbo.domain.enumeration.ResponseStatusEnum;
 import cn.hubbo.domain.vo.Result;
-import cn.hubbo.utils.lang.base.ClientInfo;
+import cn.hubbo.utils.common.base.ClientInfo;
 import cn.hubbo.utils.web.ServletUtils;
 import cn.hutool.core.net.NetUtil;
 import jakarta.servlet.ServletException;
@@ -35,7 +35,6 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
      * @param request       请求
      * @param response      响应
      * @param authException 异常信息
-     *
      * @throws IOException      异常信息
      * @throws ServletException 异常信息
      */

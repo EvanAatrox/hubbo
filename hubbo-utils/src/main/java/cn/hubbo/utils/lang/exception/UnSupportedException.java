@@ -1,12 +1,12 @@
-package cn.hubbo.utils.lang;
+package cn.hubbo.utils.lang.exception;
 
 /**
  * @author 张晓华
  * @date 2023-10-20 10:01
  * @usage 当前类的用途描述
  */
-public class UnSupportedException extends IllegalArgumentException{
-    
+public class UnSupportedException extends IllegalArgumentException {
+
     public UnSupportedException(String s) {
         super(s);
     }
@@ -18,5 +18,5 @@ public class UnSupportedException extends IllegalArgumentException{
     public UnSupportedException(Throwable cause) {
         super(cause);
     }
-    
+
 }

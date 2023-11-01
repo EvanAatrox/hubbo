@@ -2,9 +2,9 @@ package cn.hubbo.unit;
 
 import cn.hubbo.domain.dos.User;
 import cn.hubbo.utils.common.annotation.test.TestCase;
-import cn.hubbo.utils.date.TimeUtils;
-import cn.hubbo.utils.reflect.ObjectUtil;
-import cn.hubbo.utils.reflect.ReflectUtils;
+import cn.hubbo.utils.common.date.TimeUtils;
+import cn.hubbo.utils.common.reflect.ObjectUtil;
+import cn.hubbo.utils.common.reflect.ReflectUtils;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import sun.misc.Unsafe;
@@ -39,7 +39,7 @@ public class ReflectUtilsTest {
         });
         System.out.println("耗时 " + execute + " ms");
     }
-    
+
     @Test
     @TestCase("获取指定的field的value值")
     public void testGetSpecifiedField() {
@@ -47,7 +47,7 @@ public class ReflectUtilsTest {
         Object value = ObjectUtil.getFieldValue(user, "userId");
         System.out.println(value);
     }
-    
+
     @Test
     @TestCase("测试属性拷贝")
     public void testCopyProperties() {
@@ -55,7 +55,7 @@ public class ReflectUtilsTest {
                 .setUsername("哈哈哈")
                 .setPassword("12134141");
         User test = new User();
-        ObjectUtil.copyFieldValue(user,test);
+        ObjectUtil.copyFieldValue(user, test);
         System.out.println(test);
     }
 

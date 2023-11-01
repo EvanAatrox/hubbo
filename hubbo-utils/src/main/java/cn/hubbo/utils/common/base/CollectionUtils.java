@@ -1,4 +1,4 @@
-package cn.hubbo.utils.common;
+package cn.hubbo.utils.common.base;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,7 +20,6 @@ public final class CollectionUtils {
      * @param collection 集合
      * @param other      集合数组
      * @param <K>        期望类型
-     *
      * @return 合并后的集合
      */
     @SafeVarargs
@@ -38,11 +37,12 @@ public final class CollectionUtils {
 
 
     /**
-     *  交运算
-     * @param collection 
+     * 交运算
+     *
+     * @param collection
      * @param other
-     * @return
      * @param <K>
+     * @return
      */
     public static <K> Collection intersection(Collection<K> collection, Collection<K>... other) {
         if (Objects.isNull(collection)) {

@@ -1,4 +1,4 @@
-package cn.hubbo.utils.common;
+package cn.hubbo.utils.common.base;
 
 import cn.hubbo.utils.common.annotation.json.Ignore;
 import cn.hubbo.utils.common.json.BasicEnumTypeAdapterFactory;

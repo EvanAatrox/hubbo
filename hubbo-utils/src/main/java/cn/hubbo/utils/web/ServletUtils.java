@@ -1,8 +1,8 @@
 package cn.hubbo.utils.web;
 
-import cn.hubbo.utils.common.JsonUtils;
-import cn.hubbo.utils.common.StrUtils;
-import cn.hubbo.utils.lang.base.ClientInfo;
+import cn.hubbo.utils.common.base.ClientInfo;
+import cn.hubbo.utils.common.base.JsonUtils;
+import cn.hubbo.utils.common.base.StrUtils;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.google.common.net.MediaType;

@@ -1,7 +1,7 @@
-package cn.hubbo.utils.lang.base;
+package cn.hubbo.utils.common.base;
 
-import cn.hubbo.utils.lang.OperationNotAllowedException;
-import cn.hubbo.utils.reflect.ReflectUtils;
+import cn.hubbo.utils.common.reflect.ReflectUtils;
+import cn.hubbo.utils.lang.exception.OperationNotAllowedException;
 
 import java.util.HashMap;
 import java.util.Map;

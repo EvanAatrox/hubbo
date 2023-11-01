@@ -2,7 +2,7 @@ package cn.hubbo.domain.vo;
 
 import cn.hubbo.domain.dos.SystemResponseCode;
 import cn.hubbo.domain.enumeration.ResponseStatusEnum;
-import cn.hubbo.utils.lang.base.UnModifyMap;
+import cn.hubbo.utils.common.base.UnModifyMap;
 import lombok.Data;
 
 import java.util.Map;

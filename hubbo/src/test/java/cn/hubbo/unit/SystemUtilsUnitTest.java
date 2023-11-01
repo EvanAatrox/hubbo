@@ -1,7 +1,8 @@
 package cn.hubbo.unit;
 
 import cn.hubbo.utils.common.annotation.test.TestCase;
-import cn.hubbo.utils.system.SystemUtils;
+import cn.hubbo.utils.common.system.SystemTools;
+import cn.hubbo.utils.common.system.SystemUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -10,15 +11,14 @@ import org.junit.jupiter.api.Test;
  * @usage 当前类的用途描述
  */
 public class SystemUtilsUnitTest {
-    
-    
-    
+
+
     @Test
     @TestCase("获取CPU负载信息")
     public void testCpuInfo() {
         SystemUtils.loadInfo();
+        new SystemTools().loadInfo();
     }
-    
-    
-    
+
+
 }
