@@ -150,4 +150,5 @@ replay_pid*
 
 /**/*.iml
 /**/target/
-
+/**/node_modules
+/**/dist
