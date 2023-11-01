@@ -1,4 +1,4 @@
-package cn.hubbo.utils.security;
+package cn.hubbo.utils.common.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -16,6 +16,7 @@ import java.util.Map;
  * @date 2023/10/18 21:51
  * @Copyright © 2023-2025 版权所有，未经授权均为剽窃，作者保留一切权利
  */
+@Deprecated
 public final class JWTUtils {
 
     private static final Algorithm ALGORITHM = Algorithm.HMAC256("123456");

@@ -1,6 +1,9 @@
 package cn.hubbo.common.json;
 
 import cn.hubbo.utils.common.JsonUtils;
+import cn.hubbo.utils.common.json.GsonEntity;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
@@ -16,33 +19,36 @@ import java.util.Objects;
  */
 
 
-public class GsonRedisSerializer<T> implements RedisSerializer<T> {
+public class GsonRedisSerializer implements RedisSerializer<Object> {
 
-    @SuppressWarnings({"rawtypes"})
-    private final Class cla;
 
     private final byte[] arr = new byte[0];
 
-    public GsonRedisSerializer(Object target) {
-        this.cla = target.getClass();
-    }
 
     @Override
-    public byte[] serialize(T t) throws SerializationException {
-        if (Objects.isNull(t)) {
+    public byte[] serialize(Object obj) throws SerializationException {
+        if (Objects.isNull(obj)) {
             return arr;
         }
-        return JsonUtils.getStrategiesGson().toJson(t, cla).getBytes(StandardCharsets.UTF_8);
+        return JsonUtils.getStrategiesGson().toJson(obj).getBytes(StandardCharsets.UTF_8);
     }
-
-    @SuppressWarnings({"unchecked"})
+    
+    
+    
     @Override
-    public T deserialize(byte[] bytes) throws SerializationException {
+    public Object deserialize(byte[] bytes) throws SerializationException {
         if (Objects.isNull(bytes) || bytes.length == 0) {
             return null;
         }
         String jsonStr = new String(bytes, StandardCharsets.UTF_8);
-        return (T) JsonUtils.getStrategiesGson().fromJson(jsonStr, cla);
+        JsonObject jsonObject = JsonParser.parseString(jsonStr).getAsJsonObject();
+        String className = jsonObject.get(GsonEntity.PROPERTY_NAME).getAsString();
+        try {
+            Class<?> cla = Class.forName(className);
+            return JsonUtils.getStrategiesGson().fromJson(jsonStr, cla);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

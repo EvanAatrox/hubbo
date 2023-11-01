@@ -2,7 +2,7 @@ package cn.hubbo.common.domain.to;
 
 import cn.hubbo.domain.dos.User;
 import cn.hubbo.domain.enumeration.AccountStatusEnum;
-import cn.hubbo.utils.annotation.json.Ignore;
+import cn.hubbo.utils.common.annotation.json.Ignore;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;

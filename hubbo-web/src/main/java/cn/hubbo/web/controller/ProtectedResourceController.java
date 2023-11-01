@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Package cn.hubbo.web.controller
  * @date 2023/10/23 21:23
  * @Copyright © 2023-2025 版权所有，未经授权均为剽窃，作者保留一切权利
+ * @usage 通用的保护资源控制器
  */
 @RestController
 @RequestMapping("/resource")

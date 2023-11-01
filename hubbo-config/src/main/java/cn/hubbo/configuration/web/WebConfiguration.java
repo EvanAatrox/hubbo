@@ -22,7 +22,7 @@ import org.springframework.http.converter.json.GsonHttpMessageConverter;
  */
 @Configuration
 public class WebConfiguration {
-    
+
     @Value("${spring.data.redis.password}")
     private String pass;
 
@@ -46,7 +46,7 @@ public class WebConfiguration {
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         RedisSerializer<String> keySerializer = RedisSerializer.string();
-        GsonRedisSerializer<Object> valueSerializer = new GsonRedisSerializer<>(new Object());
+        GsonRedisSerializer valueSerializer = new GsonRedisSerializer();
         redisTemplate.setKeySerializer(keySerializer);
         redisTemplate.setHashKeySerializer(keySerializer);
         redisTemplate.setValueSerializer(valueSerializer);

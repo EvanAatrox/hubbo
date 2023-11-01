@@ -1,4 +1,4 @@
-package cn.hubbo.utils.annotation.json;
+package cn.hubbo.utils.common.annotation.json;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -83,6 +83,7 @@ public class BasicEnumTypeAdapter<T extends BasicEnum> extends TypeAdapter<T> {
      * and converts it to a Java object. Returns the converted object.
      *
      * @param in 序列化后的json字符串信息
+     *
      * @return the converted Java object. May be null. 反序列化后的枚举对象
      */
     @Override

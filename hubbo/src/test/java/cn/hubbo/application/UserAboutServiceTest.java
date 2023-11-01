@@ -6,7 +6,7 @@ import cn.hubbo.domain.enumeration.AccountStatusEnum;
 import cn.hubbo.domain.enumeration.GenderEnum;
 import cn.hubbo.service.IRoleService;
 import cn.hubbo.service.IUserService;
-import cn.hubbo.utils.annotation.test.TestCase;
+import cn.hubbo.utils.common.annotation.test.TestCase;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

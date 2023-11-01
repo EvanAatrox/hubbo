@@ -1,4 +1,4 @@
-package cn.hubbo.utils.annotation.test;
+package cn.hubbo.utils.common.annotation.test;
 
 import com.google.common.annotations.VisibleForTesting;
 

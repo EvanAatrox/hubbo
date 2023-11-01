@@ -1,6 +1,6 @@
 package cn.hubbo.utils.common;
 
-import cn.hubbo.utils.annotation.json.Ignore;
+import cn.hubbo.utils.common.annotation.json.Ignore;
 import cn.hubbo.utils.common.json.BasicEnumTypeAdapterFactory;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -39,7 +39,7 @@ public class JsonUtils {
                 .setPrettyPrinting()
                 .disableInnerClassSerialization()
                 .disableHtmlEscaping()
-                .setVersion(0.1D)
+                .serializeNulls()
                 .setExclusionStrategies(exclusionStrategies == null ? new ExclusionStrategy[]{} : exclusionStrategies.toArray(new ExclusionStrategy[]{}))
                 .registerTypeAdapterFactory(new BasicEnumTypeAdapterFactory())
                 .create();

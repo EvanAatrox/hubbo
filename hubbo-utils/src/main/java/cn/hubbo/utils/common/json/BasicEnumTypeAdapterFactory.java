@@ -34,6 +34,7 @@ public class BasicEnumTypeAdapterFactory implements TypeAdapterFactory {
     /**
      * @param type 序列化对象的类型
      * @param <T>  期望类型
+     *
      * @return 适配器对象
      */
     private <T> TypeAdapter<T> cache(TypeToken<T> type) {

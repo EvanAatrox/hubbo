@@ -1,7 +1,7 @@
 package cn.hubbo.unit;
 
 import cn.hubbo.domain.dos.User;
-import cn.hubbo.utils.annotation.test.TestCase;
+import cn.hubbo.utils.common.annotation.test.TestCase;
 import cn.hubbo.utils.date.TimeUtils;
 import cn.hubbo.utils.reflect.ObjectUtil;
 import cn.hubbo.utils.reflect.ReflectUtils;

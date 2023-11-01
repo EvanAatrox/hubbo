@@ -1,6 +1,6 @@
 package cn.hubbo.application;
 
-import cn.hubbo.utils.annotation.test.TestCase;
+import cn.hubbo.utils.common.annotation.test.TestCase;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
