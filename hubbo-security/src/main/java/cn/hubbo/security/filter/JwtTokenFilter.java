@@ -46,12 +46,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             JWTObject jwtObject = JWTTokenBuilder.parseJWTToken(token, jwtProperties);
             if (jwtObject.isLegal()) {
                 String uuid = jwtObject.getUuid();
-                User user = (User) this.ops.get(RedisConstants.USER_TOKEN_PREFIX.concat(jwtObject.getUsername()));
-                SecurityUser securityUser = new SecurityUser();
-                securityUser.setUserDetail(user);
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                String storageToken = (String) this.ops.get(RedisConstants.USER_TOKEN_CACHE_PREFIX.concat(uuid));
+                // 和服务端token比对，后期需要进行token的需求操作
+                if (token.equals(storageToken)) {
+                    User user = (User) this.ops.get(RedisConstants.USER_TOKEN_PREFIX.concat(jwtObject.getUsername()));
+                    SecurityUser securityUser = new SecurityUser();
+                    securityUser.setUserDetail(user);
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }
             }
         }
         filterChain.doFilter(request, response);

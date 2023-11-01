@@ -26,7 +26,8 @@ public class ProtectedResourceController {
 
 
     @GetMapping("/client/ip")
-    @PreAuthorize("hasAuthority('admin:create')")
+    // @PreAuthorize("hasAuthority('admin:create')")
+    @PreAuthorize("hasAuthority('dev.*.*')")
     public ClientInfo clientInfo(HttpServletRequest request) {
         if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof SecurityUser securityUser) {
             log.info("访问当前资源的用户信息 {}", securityUser);

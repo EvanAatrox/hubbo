@@ -38,7 +38,6 @@ public class JsonUtils {
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
                 .setPrettyPrinting()
                 .disableInnerClassSerialization()
-                .disableHtmlEscaping()
                 .serializeNulls()
                 .setExclusionStrategies(exclusionStrategies == null ? new ExclusionStrategy[]{} : exclusionStrategies.toArray(new ExclusionStrategy[]{}))
                 .registerTypeAdapterFactory(new BasicEnumTypeAdapterFactory())

@@ -17,6 +17,7 @@ public interface IRoleService {
 
     /**
      * @param role 角色信息
+     *
      * @return 保存的角色信息
      */
 
@@ -27,9 +28,10 @@ public interface IRoleService {
      * 根据编号查询角色信息
      *
      * @param id 角色id
+     *
      * @return role信息
      */
     Optional<Role> queryById(Integer id);
-
+    
 
 }

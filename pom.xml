@@ -46,6 +46,8 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.8.22</kotlin.version>
+        <oshi.version>6.4.6</oshi.version>
+        <jna.version>5.13.0</jna.version>
     </properties>
 
 

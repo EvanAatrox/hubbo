@@ -1,5 +1,8 @@
 package cn.hubbo.utils.system;
 
+import cn.hutool.system.oshi.CpuInfo;
+import cn.hutool.system.oshi.OshiUtil;
+
 /**
  * @author 张晓华
  * @date 2023-11-01 10:30
@@ -7,6 +10,13 @@ package cn.hubbo.utils.system;
  */
 public final class SystemUtils {
     
+    
+    public static void loadInfo() {
+        CpuInfo cpuInfo = OshiUtil.getCpuInfo();
+        System.out.println(cpuInfo);
+        String cpuModel = cpuInfo.getCpuModel();
+        System.out.println(cpuModel);
+    }
     
     
     

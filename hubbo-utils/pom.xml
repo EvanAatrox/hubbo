@@ -82,6 +82,23 @@
             <version>${kotlin.version}</version>
         </dependency>
 
+        <!-- OSHI相关依赖，用来监控系统负载信息以及当前服务的资源消费情况 -->
+        <dependency>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+            <version>${oshi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>${jna.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna-platform</artifactId>
+            <version>${jna.version}</version>
+        </dependency>
+        
     </dependencies>
 
 

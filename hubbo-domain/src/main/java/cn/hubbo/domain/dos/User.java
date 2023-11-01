@@ -4,6 +4,7 @@ import cn.hubbo.domain.enumeration.AccountStatusEnum;
 import cn.hubbo.domain.enumeration.GenderEnum;
 import cn.hubbo.utils.common.annotation.json.Ignore;
 import cn.hubbo.utils.common.json.GsonEntity;
+import com.google.common.collect.Sets;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,12 +16,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Comment;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author 张晓华
@@ -96,6 +102,28 @@ public class User extends GsonEntity {
     )
     @Ignore
     private List<Role> roles;
+
+
+    @Transient
+    private Set<String> permissionCodes;
+
+
+    public void setRoles(List<Role> roles) {
+        getPermissionCodes();
+        this.roles = roles;
+    }
+
+    public Set<String> getPermissionCodes() {
+        if (!Objects.isNull(this.permissionCodes)) {
+            return this.permissionCodes;
+        }
+        if (CollectionUtils.isEmpty(roles)) {
+            return Sets.newHashSet();
+        }
+        Set<String> permissionCodes = roles.stream().map(Role::getPermissionCode).collect(Collectors.toSet());
+        this.permissionCodes = permissionCodes;
+        return permissionCodes;
+    }
 
 
 }

@@ -6,10 +6,12 @@ import cn.hubbo.utils.common.annotation.json.Ignore;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author 张晓华
@@ -58,4 +60,11 @@ public class SecurityUser implements UserDetails, Serializable {
     public boolean isEnabled() {
         return userDetail.getAccountStatus().equals(AccountStatusEnum.DEFAULT);
     }
+
+
+    public Set<GrantedAuthority> getAuthorities() {
+        return userDetail.getPermissionCodes().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
+    }
+    
+
 }

@@ -32,15 +32,22 @@ public class GsonRedisSerializer implements RedisSerializer<Object> {
         }
         return JsonUtils.getStrategiesGson().toJson(obj).getBytes(StandardCharsets.UTF_8);
     }
-    
-    
-    
+
+
     @Override
     public Object deserialize(byte[] bytes) throws SerializationException {
         if (Objects.isNull(bytes) || bytes.length == 0) {
             return null;
         }
         String jsonStr = new String(bytes, StandardCharsets.UTF_8);
+        // 不是Json数据则直接返回字符串即可
+        // TODO 获取到的字符串信息有双引号包裹，不确定这样处理会不会引起其它的问题
+        if (!jsonStr.startsWith("{") && !jsonStr.endsWith("}") && !jsonStr.contains(GsonEntity.PROPERTY_NAME)) {
+            if (jsonStr.contains("\"")) {
+                jsonStr = jsonStr.replaceAll("\"", "");
+            }
+            return jsonStr;
+        }
         JsonObject jsonObject = JsonParser.parseString(jsonStr).getAsJsonObject();
         String className = jsonObject.get(GsonEntity.PROPERTY_NAME).getAsString();
         try {
