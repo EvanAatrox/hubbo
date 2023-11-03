@@ -1,20 +1,19 @@
 <template>
-  <h1 style='color: blue'>hello Vue</h1>
-  <el-link type='primary' @click='clickFun()'>hello</el-link>
-  <br>
-  <SvgComponent :style-obj='{width:800,height:800}' color='blue' name='space'
-                style='display: flex;margin-left: 30%'></SvgComponent>
+  <router-view/>
 </template>
 
 
 <script lang='ts' setup>
-import SvgComponent from '@/components/icons/SvgComponent.vue'
-import {ElMessage} from 'element-plus'
-
+import {ElMessage} from "element-plus";
+import appStore from "@/store";
 
 let clickFun = () => {
   ElMessage.success('ok')
 }
+
+console.log(appStore.globalStore.appName)
+console.log(appStore.userStore.username)
+
 
 </script>
 
