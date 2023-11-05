@@ -7,9 +7,11 @@ import zhCn from 'element-plus/dist/locale/zh-cn.js'
 import 'virtual:svg-icons-register'
 /* 引入全局样式 */
 import '@/styles/index.scss'
-import {createPinia} from "pinia"
-import {initialStore} from "@/store"
-import router from "@/view";
+import {createPinia} from 'pinia'
+import {initialStore} from '@/store'
+import router from '@/view'
+import '@icon-park/vue-next/styles/index.css'
+import iconPark from '@/mixin/iconPark.ts'
 
 const app = createApp(App)
 // 挂载store
@@ -21,5 +23,5 @@ app.use(elementPlus, {
 })
 // 初始化Pinia信息
 initialStore()
-// console.log(import.meta.env)
+iconPark(app)
 app.mount('#app')
