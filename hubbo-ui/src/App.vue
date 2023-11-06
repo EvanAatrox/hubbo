@@ -1,23 +1,9 @@
 <template>
-  <div class='common-layout'>
-    <el-container>
-      <el-header>
-        <HeaderBar/>
-      </el-header>
-      <el-container>
-        <el-aside>
-          <AsideBar/>
-        </el-aside>
-        <el-main>Main</el-main>
-      </el-container>
-    </el-container>
-  </div>
+  <router-view/>
 </template>
 
 
 <script lang='ts' setup>
-import AsideBar from '@/components/AsideBar.vue'
-import HeaderBar from '@/components/HeaderBar.vue'
 </script>
 
 
@@ -34,12 +20,12 @@ body {
 }
 
 .el-aside {
-  background-color: red;
+  background-color: blue;
   border-right: none;
 }
 
 .el-main {
-  background-color: orange;
+  background-color: yellow;
   color: #1a1a1a;
 }
 

@@ -8,6 +8,9 @@ import {
     Moon,
     PullRequests,
     SunOne,
+    Success,
+    Telegram,
+    CityGate
 } from '@icon-park/vue-next'
 
 export default function iconPark(app) {
@@ -20,4 +23,7 @@ export default function iconPark(app) {
     app.component('MonitorCamera', MonitorCamera)
     app.component('Moon', Moon)
     app.component('SunOne', SunOne)
+    app.component('Success', Success)
+    app.component('Telegram', Telegram)
+    app.component('CityGate', CityGate)
 }

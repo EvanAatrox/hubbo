@@ -35,6 +35,7 @@ export default function getDefaultRoutes() {
         {
             name: 'login',
             path: '/user/login',
+            // @ts-ignore
             component: () => import('@/views/user/UserLogin.vue'),
             meta: {
                 auth: false,

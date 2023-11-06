@@ -12,9 +12,7 @@ const router = createRouter({
 
 // 前置路由守卫
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-    if (to.path === '/login' || !to.meta.auth) {
-        next()
-    } else if (checkHasPermission()) {
+    if (to.path === '/user/login' || !to.meta.auth || checkHasPermission()) {
         next()
     } else {
         error('无权限访问,即将前往登录页')
