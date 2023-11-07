@@ -41,7 +41,7 @@
                             <el-col :span='24'>
                                 <el-form-item label='账户&nbsp;&nbsp;&nbsp;&nbsp;' prop='account'>
                                     <el-input
-                                        v-model='ruleForm.account'
+                                        v-model.trim='ruleForm.account'
                                         size='large'
                                         show-word-limit
                                         maxlength='20'
@@ -56,7 +56,7 @@
                             <el-col :span='24'>
                                 <el-form-item label='密码&nbsp;&nbsp;&nbsp;&nbsp;' prop='passwd'>
                                     <el-input
-                                        v-model='ruleForm.passwd'
+                                        v-model.trim='ruleForm.passwd'
                                         type='password'
                                         size='large'
                                         show-password
@@ -71,7 +71,7 @@
                             <el-col :span='24'>
                                 <el-form-item label='验证码' prop='verifyCode'>
                                     <el-input
-                                        v-model.number='ruleForm.verifyCode'
+                                        v-model='ruleForm.verifyCode'
                                         show-word-limit
                                         maxlength='6'
                                         size='large' />
@@ -116,10 +116,10 @@
                             <el-col :span='24'>
                                 <el-form-item label='手机号' prop='phone'>
                                     <el-input
-                                        v-model='ruleForm.phone'
+                                        v-model.number='ruleForm.phone'
                                         size='large'
                                         show-word-limit
-                                        maxlength='20'
+                                        maxlength='11'
                                         type='text'
                                         autocomplete='off' />
                                 </el-form-item>
@@ -165,7 +165,7 @@
 </template>
 
 <script lang='ts' setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 
 // ---------------------------------校验区
@@ -178,9 +178,13 @@ import type { FormInstance, FormRules } from 'element-plus'
  * @param callback 回调函数
  */
 const checkUsername = (rule: any, value: any, callback: any) => {
-    if (!value) {
+    flagObj.arr[0] = false
+    if (!value || '' === value.trim()) {
         callback(new Error('用户名不允许为空'))
+    } else if (value === 'root' || value === 'admin') {
+        callback(new Error('不允许使用的用户名'))
     } else {
+        flagObj.arr[0] = true
         callback()
     }
 }
@@ -191,10 +195,18 @@ const checkUsername = (rule: any, value: any, callback: any) => {
  * @param value dom值
  * @param callback 回调函数
  */
+const simpleNumberPasswdRegex = /^[0-9]+$/
+
+const simpleLetterPasswdRegex = /^[a-z]+$/
 const checkPasswd = (rule: any, value: any, callback: any) => {
-    if (!value) {
+    flagObj.arr[1] = false
+    if (!value || '' === value.trim()) {
         callback(new Error('密码不允许为空'))
+    } else if (simpleNumberPasswdRegex.test(value) || simpleLetterPasswdRegex.test(value)) {
+        // 过滤一些简单的密码可以避免一些没有意义登录请求
+        callback(new Error('过于简单的密码'))
     } else {
+        flagObj.arr[1] = true
         callback()
     }
 }
@@ -207,9 +219,13 @@ const checkPasswd = (rule: any, value: any, callback: any) => {
  * @param callback 回调函数
  */
 const checkVerifyCode = (rule: any, value: any, callback: any) => {
+    flagObj.arr[2] = false
     if (!value) {
         callback(new Error('验证码不允许为空'))
+    } else if (value.length !== 6) {
+        callback(new Error('请输入有效的验证码'))
     } else {
+        flagObj.arr[2] = true
         callback()
     }
 }
@@ -221,10 +237,17 @@ const checkVerifyCode = (rule: any, value: any, callback: any) => {
  * @param value dom值
  * @param callback 回调函数
  */
+
+const simplePhoneRegex = /(13|14|15|17|18|19)([0-9]){9}/
+
 const checkPhone = (rule: any, value: any, callback: any) => {
+    flagObj.arr[3] = false
     if (!value) {
         callback(new Error('手机号不允许为空'))
+    } else if ((value + '').length !== 11 || !simplePhoneRegex.test(value)) {
+        callback(new Error('不存在的手机号'))
     } else {
+        flagObj.arr[3] = true
         callback()
     }
 }
@@ -237,9 +260,13 @@ const checkPhone = (rule: any, value: any, callback: any) => {
  * @param callback 回调函数
  */
 const checkPhoneCode = (rule: any, value: any, callback: any) => {
+    flagObj.arr[4] = false
     if (!value) {
         callback(new Error('验证码不允许为空'))
+    } else if ((value + '').length !== 6 || !/^[0-9]+$/.test(value)) {
+        callback(new Error('请输入有效的6位长度验证码'))
     } else {
+        flagObj.arr[4] = true
         callback()
     }
 }
@@ -247,6 +274,11 @@ const checkPhoneCode = (rule: any, value: any, callback: any) => {
 // ---------------------------------
 
 const ruleFormRef = ref<FormInstance>()
+
+// 长度为5的一个数组,0,1,2代表账户,密码,验证码的验证状态,3,4代表手机号的验证状态
+const flagObj = reactive({
+    arr: new Array(5),
+})
 
 const ruleForm = reactive({
     // 用户名
@@ -266,7 +298,7 @@ const ruleForm = reactive({
 })
 
 
-// 登录按钮的禁用标志位
+// 登录按钮的禁用标志位,通过监视flagObj.arr和ruleForm的loginMethod数组值的变化更新disabledFlag的值
 const disabledFlag = ref(true)
 
 //  校验规则
@@ -279,9 +311,16 @@ const rules = reactive<FormRules<typeof ruleForm>>({
 })
 
 
-// 完成登录的方法
+/**
+ * 登录的核心逻辑
+ * @param form 表单对象
+ */
+// TODO 用户登录
 const doLogin = (form) => {
     console.log('doLogin', form)
+    const obj = { ...ruleForm }
+    const loginParam: string = JSON.stringify(obj)
+    console.log(`待提交的参数 ${loginParam}`)
 }
 
 
@@ -296,24 +335,42 @@ const phonePasswdLoginMethod = reactive({
 
 
 /**
- *
+ * 登录方式的文字样式相关控制
  * @param methodType 登录方式
  * @param event 事件源
  */
+    // @ts-ignore
 const changeLoginMethod = (methodType, event) => {
-    // TODO 重置表单
-    if (methodType === 1) {
-        phonePasswdLoginMethod.loginMethodActive = true
-        usernamePasswdLoginMethod.loginMethodActive = false
-        ruleForm.loginMethod = 1
-    } else {
-        usernamePasswdLoginMethod.loginMethodActive = true
-        phonePasswdLoginMethod.loginMethodActive = false
-        ruleForm.loginMethod = 0
+        // TODO 重置表单
+        if (methodType === 1) {
+            ruleForm.account = undefined
+            ruleForm.passwd = undefined
+            ruleForm.verifyCode = undefined
+            phonePasswdLoginMethod.loginMethodActive = true
+            usernamePasswdLoginMethod.loginMethodActive = false
+            ruleForm.loginMethod = 1
+        } else {
+            ruleForm.phone = undefined
+            ruleForm.phoneCode = undefined
+            usernamePasswdLoginMethod.loginMethodActive = true
+            phonePasswdLoginMethod.loginMethodActive = false
+            ruleForm.loginMethod = 0
+        }
     }
-}
 
-
+/**
+ * 控制登录按钮的可用与否
+ * 监视flagObj.arr数组值的变化
+ */
+watch(() => flagObj.arr, (value, oldValue) => {
+    if (ruleForm.loginMethod === 0 && flagObj.arr[0] && flagObj.arr[1] && flagObj.arr[2]) {
+        disabledFlag.value = false
+    } else if (ruleForm.loginMethod == 1 && flagObj.arr[3] && flagObj.arr[4]) {
+        disabledFlag.value = false
+    } else {
+        disabledFlag.value = true
+    }
+}, { immediate: false, deep: true })
 </script>
 
 
