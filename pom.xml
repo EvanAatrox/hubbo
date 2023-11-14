@@ -48,6 +48,7 @@
         <kotlin.version>1.9.20</kotlin.version>
         <oshi.version>6.4.6</oshi.version>
         <jna.version>5.13.0</jna.version>
+        <apache.code.version>1.16.0</apache.code.version>
     </properties>
 
 

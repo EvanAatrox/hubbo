@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized,} from 'vue-router'
 
-import {checkHasPermission} from '@/utils/permissionUtils.ts'
-import {error} from '@/utils/messageUtils.ts'
+import {checkHasPermission} from '@/utils/PermissionUtils.ts'
+import {error} from '@/utils/MessageUtils.ts'
 import getBaseRoutes from '@/view/baseRoutes.ts'
 
 

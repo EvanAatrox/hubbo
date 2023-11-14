@@ -42,6 +42,16 @@ export default function getDefaultRoutes() {
                 title: '登录',
             },
         },
+        {
+            name: 'encryptTest',
+            path: '/encrypt/test',
+            // @ts-ignore
+            component: () => import('@/views/other/EncryptTest.vue'),
+            meta: {
+                auth: false,
+                title: '加密测试',
+            },
+        },
     ]
     return baseRoutes
 }
