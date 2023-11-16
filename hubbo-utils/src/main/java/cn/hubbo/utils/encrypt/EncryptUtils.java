@@ -173,6 +173,45 @@ public class EncryptUtils {
 
 
     /**
+     * 使用RSA私钥加密
+     *
+     * @param privateKeyString 私钥字符串
+     * @param rawContent       原始文本信息
+     * @return 私钥加密后的文本信息
+     */
+    public static String encryptWithPrivateKey(String privateKeyString, String rawContent) {
+        assert StringUtils.isNotBlank(privateKeyString) && StringUtils.isNotBlank(rawContent) : "RSA加密所需的参数不允许为空";
+        try {
+            PrivateKey privateKey = getPrivateKey(privateKeyString);
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+            return Base64.encodeBase64String(doFinal(cipher, rawContent.getBytes(StandardCharsets.UTF_8), Mode.ENCRYPT));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 使用RSA公钥解密
+     *
+     * @param publicKeyString 公钥字符串
+     * @param encodingContent 加密后的文本信息
+     * @return 原始文本信息
+     */
+    public static String decryptWithPublicKey(String publicKeyString, String encodingContent) {
+        assert StringUtils.isNotBlank(publicKeyString) && StringUtils.isNotBlank(encodingContent) : "RSA解密所需的参数不允许为空";
+        try {
+            PublicKey publicKey = getPublicKey(publicKeyString);
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, publicKey);
+            return new String(doFinal(cipher, Base64.decodeBase64(encodingContent), Mode.DECRYPT), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
      * @param privateKeyString 私钥字符串
      * @param encodingContent  被公钥加密过的文本信息
      * @return 返回原始文本信息

@@ -187,5 +187,39 @@ public class EncryptTest {
         System.out.println(source);
     }
 
+    @Test
+    public void testGenerateRSAKey() throws IOException {
+        var publicKey = new File("D:\\data\\cache\\decompress\\url\\public.txt");
+        var privateKey = new File("D:\\data\\cache\\decompress\\url\\private.txt");
+        Pair<String, String> pair = EncryptUtils.generateKeyPair();
+        String publiKeyString = pair.getKey();
+        String privateKeyString = pair.getValue();
+        FileUtils.writeStringToFile(publicKey, publiKeyString, StandardCharsets.UTF_8);
+        FileUtils.writeStringToFile(privateKey, privateKeyString, StandardCharsets.UTF_8);
+    }
+
+
+    @Test
+    public void testDecryptJsEncodingContent() throws IOException {
+        var encodingContent = "RavXxcj5F/wYnXzmRCojb8JI3DG0TPS5vorH7ABaLum0fUAlSQt2OV/YEs8MrmnB5u6sYEWWrOu9+9Ci/0eHHbeoO87C5T0pj4/qC6cCu0dSEh+gqbltEvWOlB4FF/7O40Vwupxvg8YEB2WfP0j52/Iv/pAZd1yu0lrK12IWRME=";
+        var privateKey = new File("D:\\data\\cache\\decompress\\url\\private.txt");
+        String keyString = FileUtils.readFileToString(privateKey, StandardCharsets.UTF_8);
+        String source = EncryptUtils.decryptWithPrivateKey(keyString, encodingContent);
+        System.out.println(source);
+    }
+
+    @Test
+    public void testEncryptWithPrivateKey() throws IOException {
+        var privateKey = new File("D:\\data\\cache\\decompress\\url\\private.txt");
+        String privateKeyString = FileUtils.readFileToString(privateKey, StandardCharsets.UTF_8);
+        String encodingContent = EncryptUtils.encryptWithPrivateKey(privateKeyString, "abc");
+        System.out.println(encodingContent);
+        var publicKey = new File("D:\\data\\cache\\decompress\\url\\public.txt");
+        String publicKeyString = FileUtils.readFileToString(publicKey, StandardCharsets.UTF_8);
+        String source = EncryptUtils.decryptWithPublicKey(publicKeyString, encodingContent);
+        System.out.println(source);
+
+    }
+
 
 }

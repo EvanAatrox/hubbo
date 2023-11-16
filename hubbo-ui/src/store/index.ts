@@ -1,5 +1,5 @@
-import {useGlobalStore} from "@/store/globalStore.ts";
-import {useUserStore} from "@/store/userStore.ts"
+import {useGlobalStore} from "@/store/GlobalStore.ts";
+import {useUserStore} from "@/store/UserStore.ts"
 
 
 interface AppStore {
